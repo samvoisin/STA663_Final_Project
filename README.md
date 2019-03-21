@@ -54,7 +54,7 @@ If no such input cases are available (or in addition to such input cases), how d
 
 Test the algorithm on the real-world examples in the orignal paper if possible. Try to find at least one other real-world data set not in the original paper and test it on that. Describe and interpret the results.
 
-### Comparative analysis with competing algorihtms
+### Comparative analysis with competing algorithms
 
 Find two other algorihtms that addresss a similar problem. Perform a comparison - for example, of accurary or speed. You can use native libraires of the other algorithms - you do not need to code them yourself. Comment on your observations. 
 
@@ -88,7 +88,7 @@ Each item is worth 10 points, but some sections will give up to 10 bonus points 
 2. Is the algorithm description clear and accurate? (10-20 points)
 3. Has the algorihtm been optimized? (10-20 points)
 4. Are the applicaitons to simulated/real data clear and useful? (10-20 points)
-5. Was the comarative analysis done well? (10-20 points points)
+5. Was the comparative analysis done well? (10-20 points points)
 6. Is there a well-maitnatined Github repository for the code? (10 points)
 7. Is the document show evidenc of literate programming? (10 points)
 8. Is the analyiss reproducible? (10 points)
