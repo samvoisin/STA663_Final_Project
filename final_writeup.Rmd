@@ -1,0 +1,38 @@
+---
+title: "STA 663 Final Project"
+author: "Sam Voison & Jonathan Klus"
+date: "April 30, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Abstract
+
+## Background
+
+## The Algorithm
+
+## Optimization for Performance
+
+## Application to Simulated Data
+
+## Application to Real Data
+
+## Comparative Analysis
+
+### Comparison to Non-Bayesian Hierarchical Clustering
+
+### Comparison to another algorithm (K-means?)
+
+## Discussion and Conclusions
+
+## References
+
+Heller, K. A., & Ghahramani, Z. (2005). Bayesian hierarchical clustering. 
+Proceedings of the 22nd International Conference on Machine Learning - ICML 05. 
+
+Rasmussen, C. E. (2000). The Infinite Gaussian Mixture Model. 
+Advances in Neural Information Processing Systems 12, 554-560. 
