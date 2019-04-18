@@ -1,5 +1,5 @@
 import numpy as np
-import scipy as sc
+from scipy.special import gamma
 
 class Split:
     """Split class stores all information about a given split"""
@@ -26,9 +26,9 @@ class Split:
         
         # calculate new small d_k
         self.d = (
-        	self.alpha * sc.special.gamma(self.clustsize) +
+        	self.alpha * gamma(self.clustsize) +
         	clusti.d * clustj.d
         	)
         
         # calculate new pi_k
-        self.pi = self.alpha * sc.special.gamma(self.clustsize) / self.d
+        self.pi = self.alpha * gamma(self.clustsize) / self.d
