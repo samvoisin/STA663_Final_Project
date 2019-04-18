@@ -1,10 +1,6 @@
-# Final Project - STA 663 - Statistical Computing and Computation - Spring 2019
+# Final Project: Bayesian Hierarchical Modeling - STA 663 - Statistical Computing and Computation - Spring 2019
 
-For the final project, you will need to implement a "new" statistical algorithm in Python from the research literature and write a "paper" describing the algorithm. 
-
-Deadline 2nd May 2018 at 11:59 PM
-
-***Note: 1 bonus point for each day that it is submitted before the deadline. The actual project has a maximum grade of 100, but bonus points can push it above 100.***
+Deadline 30th April 2018 at 11:59 PM
 
 ## Paper
 
@@ -57,6 +53,9 @@ Test the algorithm on the real-world examples in the orignal paper if possible. 
 ### Comparative analysis with competing algorithms
 
 Find two other algorihtms that addresss a similar problem. Perform a comparison - for example, of accurary or speed. You can use native libraires of the other algorithms - you do not need to code them yourself. Comment on your observations. 
+ - Dirichlet Process Model
+ - Hierarchical Clustering (frequentist)
+
 
 ### Discussion/conclusion
 
