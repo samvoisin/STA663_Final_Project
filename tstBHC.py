@@ -13,4 +13,7 @@ f3 = bhc.leaf.Leaf(x3, a)
 
 s12 = bhc.split.Split(f1, f2)
 s123 = bhc.split.Split(s12, f3)
-print(s123.tier)
+
+print(s123.tree)
+
+s123.trace_tree()
