@@ -1,9 +1,11 @@
 import numpy as np
 from scipy.special import gamma
-from helpfcns import prob_clust_k
+#from bhc import prob_clust_k #problem here...
 
 class Split:
-    """Split class stores all information about a given split"""
+    """Split class stores all information about a given split
+    clusti and clustj are two clusters lower in the hierarchy
+    which are joined to form new cluster k"""
     
     def __init__(self, clusti, clustj):
         """initialize Split object
@@ -21,12 +23,12 @@ class Split:
         self.left = clusti
         self.right = clustj
         self.alpha = clusti.alpha
-        self.tier = clusti.tier + clustj.tier
+        self.tier = max(clusti.tier, clustj.tier) + 1
         self.clustsize = clusti.clustsize + clustj.clustsize
         self.tree = np.array([clusti.tree, clustj.tree])
         self.clust = np.hstack([clusti.clust, clustj.clust])
         
-        # calculate new small d_k
+        # calculate new d_k
         self.d = (
         	self.alpha * gamma(self.clustsize) +
         	clusti.d * clustj.d
@@ -36,4 +38,36 @@ class Split:
         self.pi = self.alpha * gamma(self.clustsize) / self.d
 
         #calculate new prob of data under tree (i.e. p(Dk | Tk))
-        self.probDataTree = prob_clust_k(clusti, clustj, self.clustsize) # needs to be a parameter **kwarg here
+        #self.probDataTree = prob_clust_k(clusti, clustj, self.clustsize) # needs to be a parameter **kwarg here
+
+    
+
+    # this method needs error handling
+    def trace_tree(self, depth = None, direction = "both"):
+        """trace tree structure down through subtrees
+        depth specifies the depth of the trace; if None trace_tree will trace
+        to leaf layer (i.e. tier 1)
+        direction specifies a branch direction for the trace to follow; this can
+        be "left", "right", or the default value "both" """
+        if depth is None:
+            for t in self.tree:
+                print(t)
+        else:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
