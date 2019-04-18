@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.special import gamma
+from helpfcns import prob_clust_k
 
 class Split:
     """Split class stores all information about a given split"""
@@ -15,7 +16,8 @@ class Split:
 		clust - non-nested data points in cluster
 		clustsize - number of data points in cluster
 		d - tree density parameter(?)
-		pi - probability of cluster k existing"""
+		pi - prob of merging clusters i and j
+        probDataTree - prob of data under tree (i.e. p(Dk | Tk))"""
         self.left = clusti
         self.right = clustj
         self.alpha = clusti.alpha
@@ -32,3 +34,6 @@ class Split:
         
         # calculate new pi_k
         self.pi = self.alpha * gamma(self.clustsize) / self.d
+
+        #calculate new prob of data under tree (i.e. p(Dk | Tk))
+        self.probDataTree = prob_clust_k(clusti, clustj, self.clustsize) # needs to be a parameter **kwarg here

@@ -19,8 +19,9 @@ def eval_H1(ci, cj, **hkparams):
     return probsk.prod()
 
 def eval_H2(ci, cj):
-    """probability of hypothes 2: data comes from diff distr
+    """probability of hypothis 2: data comes from diff distr
     ci and cj are clusters we are checking to merge"""
+    return ci.probDatatree * cj.probDatatree
     
     
 def prob_clust_k(ci, cj, N, hkparams):
@@ -31,4 +32,7 @@ def prob_clust_k(ci, cj, N, hkparams):
     hkparams is a dictionary of relevant distribution parameters"""
     ck = Split(ci, cj)
     pik = ck.pi
-    ck.pi * eval_H1(ci, cj, **hkparams) + (1 - ck.pi) * eval_H2(ci, cj)
+    probDatatree = (
+        ck.pi * eval_H1(ci, cj, **hkparams) +
+        (1 - ck.pi) * eval_H2(ci, cj)
+        )

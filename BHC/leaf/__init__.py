@@ -9,6 +9,7 @@ class Leaf:
         alpha is prior parameter for number of clusters
         tier - level of the tree where the split occurs; leaves are tier 1
 		alpha - prior on number of clusters
+        probDataTree - prob of data under tree (i.e. p(Dk | Tk)); 1 for leaves
 		tree - nested data points in cluster; leaves have clust size 1
 		clust - non-nested data points in cluster; leaves have clust size 1
 		clustsize - number of data points in cluster; leaves have clust size 1
@@ -17,6 +18,7 @@ class Leaf:
         """
         self.tier = 1
         self.alpha = alpha
+        self.probDataTree = 1
         self.tree = np.array([pt])
         self.clust = np.array([pt])
         self.clustsize = 1
