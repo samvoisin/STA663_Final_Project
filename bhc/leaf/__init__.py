@@ -18,7 +18,7 @@ class Leaf:
         """
         self.tier = 1
         self.alpha = alpha
-        self.probDataTree = 1
+        self.margLik = 1
         self.tree = np.array([pt])
         self.clust = np.array([pt])
         self.clustsize = 1
