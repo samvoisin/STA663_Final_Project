@@ -1,6 +1,6 @@
 import numpy as np
 from scipy import stats
-from scipy import special as sp
+from scipy.special import gamma, loggamma
 
 ### hypothesis evaluation helper functions ###
 
@@ -9,7 +9,7 @@ def eval_H1(ci, cj, **hkparams):
     Evaluate hypothesis 1 for merging individual points.
     This function assumes MVTNormal-Wishart conjugacy.
     Will need to generalize later
-    ci and cj are clusters we are checking to merge
+    ci and cj - clusters being checked for merge
     
     Inv Wish prior hyperparams:
     r - scaling factor
@@ -23,7 +23,7 @@ def eval_H1(ci, cj, **hkparams):
     """
 
     # keyword arguments assignment
-    X = np.vstack([clusti.clust, clustj.clust])
+    X = np.vstack([ci.clust, cj.clust])
     N, k = X.shape
     m = hkparams["diffusePriorNorm"]["loc"]
     S = hkparams["diffusePriorNorm"]["scale"]
@@ -54,39 +54,70 @@ def eval_H1(ci, cj, **hkparams):
                 la.det(S_prime)**(-v_prime / 2)
                 )) + # end of first log
         np.log(2**(v_prime * k / 2)) +
-        np.sum(sp.loggamma((np.repeat(v_prime + 1, k) - np.arange(1, k)) / 2)) -
+        np.sum(loggamma((np.repeat(v_prime + 1, k) - np.arange(1, k)) / 2)) -
         (
         np.log(2**(v * k / 2)) +
-        np.sum(sp.loggamma((np.repeat(v + 1, k) - np.arange(1, k)) / 2))
+        np.sum(loggamma((np.repeat(v + 1, k) - np.arange(1, k)) / 2))
         )
     )
             
     return np.exp(log_pr_D_H1)
 
-################################################################################
+###############################################################################
 
 
 def eval_H2(ci, cj):
     """
     probability of hypothis 2: data comes from diff distr
-    ci and cj are clusters we are checking to merge
+    ci and cj - clusters being checked for merge
     """
     return ci.margLik * cj.margLik
     
+###############################################################################
 
-def marginal_clust_k(ci, cj, pH1):
+def marginal_clust_k(ci, cj, pik, pH1):
     """
-    calculate the marginal probability of cluster k existing
+    calculate the marginal probability of cluster k existing (marginal
+    likelihood) and updated prior for cluster k (ck.pi)
+    these objects are returned as a tuple
     This - the 'evidence' in Bayes Rule; called P(D_k | T_k) in paper
-    ci and cj - clusters we are checking to merge
+    ci and cj - clusters being checked for merge
+    ck - cluster formed by ci, cj merge
     pH1 - the probability of merge hypothesis
-    pH2 - the probability of indep hypothesis
     """
-    pik = ck.pi
-    marginalLikelihood = ck.pi * pH1 + (1 - ck.pi) * eval_H2(ci, cj)
+    marginalLikelihood = pik * pH1 + (1 - pik) * eval_H2(ci, cj)
     return marginalLikelihood
 
 
+###############################################################################
+
+def posterior_join_k(ci, cj, hkparams):
+    """
+    calculate posterior probability of merged trees i & j
+    ci and cj - clusters being checked for merge
+    hkparams - dictionary of distribution parameters
+    """
+
+    # cluster size from proposed cluster k
+    propClustSize = ci.clustsize + cj.clustsize
+    
+    # d_k for proposed cluster k
+    propd = (
+        	hkparams["clusterConcentrationParam"]["alpha"] *
+            gamma(propClustSize) +
+        	ci.d * cj.d
+        	)
+        
+    # prior for creating proposed cluster k
+    pik = ci.alpha * gamma(propClustSize) / propd
+
+    # hypothesis 1 for cluster i and cluster j
+    ijH1 = eval_H1(ci, cj, **hkparams)
+    # marginal likelihood for cluster k; hypothesis 2 calculated within
+    ijMarg = marginal_clust_k(ci, cj, pik, ijH1)
+    # posterior probability for creating cluster k from ci and cj
+    rk = pik * ijH1 / ijMarg
+    return rk
 
 
 
