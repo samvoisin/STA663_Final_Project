@@ -64,9 +64,9 @@ empX = clustData.iloc[1:10,0:2].values
 empXtX = empX.T @ empX
 
 allParams = {
-    "clusterConcentrationParam" : {"alpha" : 10},
-    "diffusePriorWish" :{"df" : 1, "scale" : 1}, # wishart params
-    "diffusePriorNorm" : {"loc" : np.mean(clustData.iloc[:,0:2], axis = 0),
+    "clusterConcentrationPrior" : {"alpha" : 10},
+    "diffuseWishPrior" : {"df" : 1, "scale" : 1}, # wishart params
+    "diffuseNormPrior" : {"loc" : np.mean(clustData.iloc[:,0:2], axis = 0),
                           "scale" : empXtX}, # mvtnormal params
 }
 
@@ -77,35 +77,35 @@ y = empX[1, :]
 z = empX[2, :]
 
 # assign some leaves
-lx = bhc.Leaf(x, 2)
-ly = bhc.Leaf(y, 2)
-lz = bhc.Leaf(z, 2)
+lx = bhc.Leaf(x, allParams)
+ly = bhc.Leaf(y, allParams)
+lz = bhc.Leaf(z, allParams)
 
 # testing merges x and y
 print("\nTest merge x and y")
-xyH1 = bhc.eval_H1(lx, ly, **allParams)
+xyH1 = bhc.eval_H1(lx, ly)
 print(f"Hypothesis 1: {xyH1}")
 xyH2 = bhc.eval_H2(lx, ly)
 print(f"Hypothesis 2: {xyH2}")
-xyMarg = bhc.posterior_join_k(lx, ly, allParams)
-print(f"Posterior probability for cluster k: {xyMarg}")
+xyMarg = bhc.posterior_join_k(lx, ly)
+print(f"Posterior probability for cluster k: {xyMarg}\n")
 
 # testing merges x and z
 print("\nTest merge x and z")
-xzH1 = bhc.eval_H1(lx, lz, **allParams)
+xzH1 = bhc.eval_H1(lx, lz)
 print(f"Hypothesis 1: {xzH1}")
 xzH2 = bhc.eval_H2(lx, lz)
 print(f"Hypothesis 2: {xzH2}")
-xzMarg = bhc.posterior_join_k(lx, lz, allParams)
-print(f"Posterior probability for cluster k: {xzMarg}")
+xzMarg = bhc.posterior_join_k(lx, lz)
+print(f"Posterior probability for cluster k: {xzMarg}\n")
 
 # testing merges z and y
 print("\nTest merge z and y")
-zyH1 = bhc.eval_H1(lz, ly, **allParams)
+zyH1 = bhc.eval_H1(lz, ly)
 print(f"Hypothesis 1: {zyH1}")
 zyH2 = bhc.eval_H2(lz, ly)
 print(f"Hypothesis 2: {zyH2}")
-zyMarg = bhc.posterior_join_k(lz, ly, allParams)
+zyMarg = bhc.posterior_join_k(lz, ly)
 print(f"Posterior probability for cluster k: {zyMarg}\n")
 
 ### x and z have highest posterior prob ###
@@ -123,3 +123,14 @@ print(f"tree:\n {xzSplit.tree}")
 print(f"clust:\n {xzSplit.clust}\n\n")
 print(f"tree dimensions: {xzSplit.tree.shape}")
 print(f"cluster dimensions: {xzSplit.clust.shape}")
+
+print(f"Marginal likelihood for xzSplit: {xzSplit.margLik}")
+
+# testing merges xz and y
+print("\nTest merge xz and y")
+xzyH1 = bhc.eval_H1(xzSplit, ly)
+print(f"Hypothesis 1: {xzyH1}")
+xzyH2 = bhc.eval_H2(xzSplit, ly)
+print(f"Hypothesis 2: {xzyH2}")
+xzyPost = bhc.posterior_join_k(xzSplit, ly)
+print(f"Posterior probability for cluster k: {xzyPost}\n")
