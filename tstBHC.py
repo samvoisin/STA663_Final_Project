@@ -54,6 +54,7 @@ clustData = pd.DataFrame(dat)
 #plt.scatter(clustData["x1"], clustData["x2"], c = clustData["c"])
 #plt.show()
 
+
 ### Set Clustering Prior Paramteres ###
 
 # Gaussian Distribution - loc is mean; scale is sd
@@ -69,5 +70,56 @@ allParams = {
                           "scale" : empXtX}, # mvtnormal params
 }
 
-for x in empX:
-    print(x)
+### subset of test data points ###
+
+x = empX[0, :]
+y = empX[1, :]
+z = empX[2, :]
+
+# assign some leaves
+lx = bhc.Leaf(x, 2)
+ly = bhc.Leaf(y, 2)
+lz = bhc.Leaf(z, 2)
+
+# testing merges x and y
+print("\nTest merge x and y")
+xyH1 = bhc.eval_H1(lx, ly, **allParams)
+print(f"Hypothesis 1: {xyH1}")
+xyH2 = bhc.eval_H2(lx, ly)
+print(f"Hypothesis 2: {xyH2}")
+xyMarg = bhc.posterior_join_k(lx, ly, allParams)
+print(f"Posterior probability for cluster k: {xyMarg}")
+
+# testing merges x and z
+print("\nTest merge x and z")
+xzH1 = bhc.eval_H1(lx, lz, **allParams)
+print(f"Hypothesis 1: {xzH1}")
+xzH2 = bhc.eval_H2(lx, lz)
+print(f"Hypothesis 2: {xzH2}")
+xzMarg = bhc.posterior_join_k(lx, lz, allParams)
+print(f"Posterior probability for cluster k: {xzMarg}")
+
+# testing merges z and y
+print("\nTest merge z and y")
+zyH1 = bhc.eval_H1(lz, ly, **allParams)
+print(f"Hypothesis 1: {zyH1}")
+zyH2 = bhc.eval_H2(lz, ly)
+print(f"Hypothesis 2: {zyH2}")
+zyMarg = bhc.posterior_join_k(lz, ly, allParams)
+print(f"Posterior probability for cluster k: {zyMarg}\n")
+
+### x and z have highest posterior prob ###
+
+xzSplit = bhc.Split(lx, lz)
+
+print("Joining leaf x and leaf z...\n")
+print("xzSplit attributes:")
+print(f"left: {xzSplit.left}")
+print(f"right: {xzSplit.right}")
+print(f"alpha: {xzSplit.alpha}")
+print(f"tier: {xzSplit.tier}")
+print(f"clustsize: {xzSplit.clustsize}")
+print(f"tree:\n {xzSplit.tree}")
+print(f"clust:\n {xzSplit.clust}\n\n")
+print(f"tree dimensions: {xzSplit.tree.shape}")
+print(f"cluster dimensions: {xzSplit.clust.shape}")

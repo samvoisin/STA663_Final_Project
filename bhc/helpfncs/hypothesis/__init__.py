@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import stats
+import scipy.linalg as la
 from scipy.special import gamma, loggamma
 
 ### hypothesis evaluation helper functions ###
