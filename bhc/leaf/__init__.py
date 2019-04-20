@@ -14,7 +14,6 @@ class Leaf:
 		alpha - cluster concentration parameter controlling
         probability of creating a new cluster k
         margLik - prob of data under tree (i.e. p(Dk | Tk)); 1 for leaves
-		tree - nested data points in cluster; leaves have clust size 1
 		clust - non-nested data points in cluster; leaves have clust size 1
 		clustsize - number of data points in cluster; leaves have clust size 1
 		d - tree density parameter(?)
@@ -24,7 +23,6 @@ class Leaf:
         self.alpha = priorParams["clusterConcentrationPrior"]["alpha"]
         self.priorParams = priorParams
         self.margLik = 1
-        self.tree = np.array([pt])
         self.clust = np.array([pt])
         self.clustsize = 1
         self.d = self.alpha

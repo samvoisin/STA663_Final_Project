@@ -21,7 +21,6 @@ class Split:
         prob of creating the new cluster k; inverited from previous Split/ Leaf
         tier - level of the tree where the split occurs
 		alpha - prior on number of clusters; unchanged for entire tree (prior)
-		tree - nested data points in cluster
 		clust - non-nested data points in cluster
 		clustsize - number of data points in cluster
 		d - tree depth parameter(?)
@@ -34,7 +33,6 @@ class Split:
         self.alpha = clusti.alpha
         self.tier = max(clusti.tier, clustj.tier) + 1
         self.clustsize = clusti.clustsize + clustj.clustsize
-        self.tree = np.array([clusti.tree, clustj.tree])
         self.clust = np.vstack([clusti.clust, clustj.clust])
         
         # calculate new d_k
