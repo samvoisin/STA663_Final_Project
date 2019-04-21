@@ -46,6 +46,10 @@ class HierarchyTree:
             self.tree[self.tierNum] = self.currTier # add new tier to tree
             self.clustCount -= 1 # remove 1 from number of clusters
         
-    def prune_tree(self):
+    def prune_tree(self, rk = 0.5):
+        """
+        Cut the tree at points where the posterior merge probability < rk
+        rk - posterior merge probability cut threshold; defaults to 0.5
+        """
         pass
             

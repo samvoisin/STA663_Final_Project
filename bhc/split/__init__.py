@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.special import gamma
-from bhc.helpfncs.hypothesis import marginal_clust_k
+from bhc.helpfncs.hypothesis import marginal_clust_k, posterior_join_k
 
 
 class Split:
@@ -26,7 +26,9 @@ class Split:
 		clustsize - number of data points in cluster
 		d - tree depth parameter(?)
 		pi - prob of merging clusters i and j
-        probDataTree - prob of data under tree (i.e. p(Dk | Tk))
+        margLik - prob of data under tree (i.e. p(Dk | Tk))
+        postMergProb - posterior probability for cluster k; referred to as rk
+        in Heller and Ghahramani BHC paper
         """
         self.left = clusti
         self.right = clustj
@@ -48,6 +50,8 @@ class Split:
         # calculate marginal likelihood for this cluster (i.e. p(Dk | Tk))
         self.margLik = marginal_clust_k(self.left, self.right)
 
+        # calculate posterior merge probability for this cluster (i.e. rk)
+        self.postMergProb = posterior_join_k(self.left, self.right)
 
 
 
