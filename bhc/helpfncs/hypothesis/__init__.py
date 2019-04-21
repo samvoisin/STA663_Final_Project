@@ -15,11 +15,12 @@ def eval_H1(ci, cj):
     
     Inv Wish prior hyperparams:
     v - df
-    r - scaling factor
+    S - prior precision matrix (currently defined as empirical cov mat)
+    
     
     Default Normal prior hyperparams:
     m - prior mean (currently defined as sample mean)
-    S - prior covariance (currently defined as empirical cov mat)
+    r - scaling factor on the prior precision of the mean
     
     hkparams - dictionary of prior parameters (e.g.
     diffuseWishPrior, diffuseNormPrior, clusterConcentrationPrior)
