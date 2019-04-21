@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Leaf:
     """Leaf class contains information for each data point at tier 1 level"""
     

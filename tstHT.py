@@ -1,6 +1,7 @@
 ###############################################################################
 ###############################################################################
 ############### Test Script for Bayesian Hierarchical Clustering ##############
+######################### testing HierarchyTree class #########################
 ###############################################################################
 ###############################################################################
 
@@ -70,67 +71,19 @@ allParams = {
                           "scale" : empXtX}, # mvtnormal params
 }
 
+
 ### subset of test data points ###
 
-x = empX[0, :]
-y = empX[1, :]
-z = empX[2, :]
+ht = bhc.HierarchyTree(empX, allParams)
+print(f"Initial tier:\n{ht.currTier}")
 
-# assign some leaves
-lx = bhc.Leaf(x, allParams)
-ly = bhc.Leaf(y, allParams)
-lz = bhc.Leaf(z, allParams)
+print(f"Growing tree...\n")
+ht.grow_tree()
 
-# testing merges x and y
-print("\nTest merge x and y")
-xyH1 = bhc.eval_H1(lx, ly)
-print(f"Hypothesis 1: {xyH1}")
-xyH2 = bhc.eval_H2(lx, ly)
-print(f"Hypothesis 2: {xyH2}")
-xyMarg = bhc.posterior_join_k(lx, ly)
-print(f"Posterior probability for cluster k: {xyMarg}\n")
-
-# testing merges x and z
-print("\nTest merge x and z")
-xzH1 = bhc.eval_H1(lx, lz)
-print(f"Hypothesis 1: {xzH1}")
-xzH2 = bhc.eval_H2(lx, lz)
-print(f"Hypothesis 2: {xzH2}")
-xzMarg = bhc.posterior_join_k(lx, lz)
-print(f"Posterior probability for cluster k: {xzMarg}\n")
-
-# testing merges z and y
-print("\nTest merge z and y")
-zyH1 = bhc.eval_H1(lz, ly)
-print(f"Hypothesis 1: {zyH1}")
-zyH2 = bhc.eval_H2(lz, ly)
-print(f"Hypothesis 2: {zyH2}")
-zyMarg = bhc.posterior_join_k(lz, ly)
-print(f"Posterior probability for cluster k: {zyMarg}\n")
-
-### x and z have highest posterior prob ###
-
-xzSplit = bhc.Split(lx, lz)
-
-print("Joining leaf x and leaf z...\n")
-print("xzSplit attributes:")
-print(f"left: {xzSplit.left}")
-print(f"right: {xzSplit.right}")
-print(f"alpha: {xzSplit.alpha}")
-print(f"tier: {xzSplit.tier}")
-print(f"clustsize: {xzSplit.clustsize}")
-print(f"tree:\n {xzSplit.tree}")
-print(f"clust:\n {xzSplit.clust}\n\n")
-print(f"tree dimensions: {xzSplit.tree.shape}")
-print(f"cluster dimensions: {xzSplit.clust.shape}")
-
-print(f"Marginal likelihood for xzSplit: {xzSplit.margLik}")
-
-# testing merges xz and y
-print("\nTest merge xz and y")
-xzyH1 = bhc.eval_H1(xzSplit, ly)
-print(f"Hypothesis 1: {xzyH1}")
-xzyH2 = bhc.eval_H2(xzSplit, ly)
-print(f"Hypothesis 2: {xzyH2}")
-xzyPost = bhc.posterior_join_k(xzSplit, ly)
-print(f"Posterior probability for cluster k: {xzyPost}\n")
+print(f"Tree complete. Clusters from bottom up:")
+for k, v in ht.tree.items():
+    print(f"tree tier: {k}")
+    print(f"sub-clusters in tier {k} follow:")
+    for g, h in ht.tree[k].items():
+        print(f"\ncluster number: {g}")
+        print(f"cluster data points:\n {h.clust}\n")

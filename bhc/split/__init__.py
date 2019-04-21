@@ -2,6 +2,7 @@ import numpy as np
 from scipy.special import gamma
 from bhc.helpfncs.hypothesis import marginal_clust_k
 
+
 class Split:
     """
     Split class stores all information about a given split
