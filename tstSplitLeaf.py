@@ -61,14 +61,14 @@ clustData = pd.DataFrame(dat)
 # Gaussian Distribution - loc is mean; scale is sd
 # Gamma Distribution - a is shape; scale is rate; leave loc at 0
 
-empX = rnd.multivariate_normal(mu1, cov1, 3)
+empX = clustData.iloc[1:10,0:2].values
 empXtX = empX.T @ empX
 
 allParams = {
     "clusterConcentrationPrior" : {"alpha" : 1},
-    "diffuseWishPrior" : {"df" : 1, "scale" : empXtX}, # wishart params
-    "diffuseNormPrior" : {"loc" : mu1,
-                          "scale" : cov1,
+    "diffuseInvWishPrior" : {"df" : 10, "scale" : empXtX}, # inverse wishart params
+    "diffuseNormPrior" : {"loc" : np.mean(clustData.iloc[:,0:2], axis = 0),
+                          "scale" : empXtX,
                           "meanscale" : 1}, # mvtnormal params
 }
 
@@ -78,9 +78,9 @@ x = empX[0, :]
 y = empX[1, :]
 z = empX[2, :]
 
-print(f"data point x:\n{x} ")
-print(f"data point y:\n{y} ")
-print(f"data point z:\n{z} ")
+#print(f"data point x:\n{x} ")
+#print(f"data point y:\n{y} ")
+#print(f"data point z:\n{z} ")
 
 # assign some leaves
 lx = bhc.Leaf(x, allParams)
@@ -90,51 +90,51 @@ lz = bhc.Leaf(z, allParams)
 # testing merges x and y
 print("\nTest merge x and y")
 xyH1 = bhc.eval_H1(lx, ly)
-print(f"Hypothesis 1: {xyH1}")
-xyH2 = bhc.eval_H2(lx, ly)
-print(f"Hypothesis 2: {xyH2}")
-xyMarg = bhc.posterior_join_k(lx, ly)
-print(f"Posterior probability for cluster k: {xyMarg}\n")
+#print(f"Hypothesis 1: {xyH1}")
+#xyH2 = bhc.eval_H2(lx, ly)
+#print(f"Hypothesis 2: {xyH2}")
+#xyMarg = bhc.posterior_join_k(lx, ly)
+#print(f"Posterior probability for cluster k: {xyMarg}\n")
 
 # testing merges x and z
-print("\nTest merge x and z")
-xzH1 = bhc.eval_H1(lx, lz)
-print(f"Hypothesis 1: {xzH1}")
-xzH2 = bhc.eval_H2(lx, lz)
-print(f"Hypothesis 2: {xzH2}")
-xzMarg = bhc.posterior_join_k(lx, lz)
-print(f"Posterior probability for cluster k: {xzMarg}\n")
+#print("\nTest merge x and z")
+#xzH1 = bhc.eval_H1(lx, lz)
+#print(f"Hypothesis 1: {xzH1}")
+#xzH2 = bhc.eval_H2(lx, lz)
+#print(f"Hypothesis 2: {xzH2}")
+#xzMarg = bhc.posterior_join_k(lx, lz)
+#print(f"Posterior probability for cluster k: {xzMarg}\n")
 
 # testing merges z and y
-print("\nTest merge z and y")
-zyH1 = bhc.eval_H1(lz, ly)
-print(f"Hypothesis 1: {zyH1}")
-zyH2 = bhc.eval_H2(lz, ly)
-print(f"Hypothesis 2: {zyH2}")
-zyMarg = bhc.posterior_join_k(lz, ly)
-print(f"Posterior probability for cluster k: {zyMarg}\n")
+#print("\nTest merge z and y")
+#zyH1 = bhc.eval_H1(lz, ly)
+#print(f"Hypothesis 1: {zyH1}")
+#zyH2 = bhc.eval_H2(lz, ly)
+#print(f"Hypothesis 2: {zyH2}")
+#zyMarg = bhc.posterior_join_k(lz, ly)
+#print(f"Posterior probability for cluster k: {zyMarg}\n")
 
 ### x and z have highest posterior prob ###
 
-xzSplit = bhc.Split(lx, lz)
-
-print("Joining leaf x and leaf z...\n")
-print("xzSplit attributes:")
-print(f"left: {xzSplit.left}")
-print(f"right: {xzSplit.right}")
-print(f"alpha: {xzSplit.alpha}")
-print(f"tier: {xzSplit.tier}")
-print(f"clustsize: {xzSplit.clustsize}")
-print(f"clust:\n {xzSplit.clust}\n\n")
-print(f"cluster dimensions: {xzSplit.clust.shape}")
-
-print(f"Marginal likelihood for xzSplit: {xzSplit.margLik}")
-
-# testing merges xz and y
-print("\nTest merge xz and y")
-xzyH1 = bhc.eval_H1(xzSplit, ly)
-print(f"Hypothesis 1: {xzyH1}")
-xzyH2 = bhc.eval_H2(xzSplit, ly)
-print(f"Hypothesis 2: {xzyH2}")
-xzyPost = bhc.posterior_join_k(xzSplit, ly)
-print(f"Posterior probability for cluster k: {xzyPost}\n")
+#xzSplit = bhc.Split(lx, lz)
+#
+#print("Joining leaf x and leaf z...\n")
+#print("xzSplit attributes:")
+#print(f"left: {xzSplit.left}")
+#print(f"right: {xzSplit.right}")
+#print(f"alpha: {xzSplit.alpha}")
+#print(f"tier: {xzSplit.tier}")
+#print(f"clustsize: {xzSplit.clustsize}")
+#print(f"clust:\n {xzSplit.clust}\n\n")
+#print(f"cluster dimensions: {xzSplit.clust.shape}")
+#
+#print(f"Marginal likelihood for xzSplit: {xzSplit.margLik}")
+#
+## testing merges xz and y
+#print("\nTest merge xz and y")
+#xzyH1 = bhc.eval_H1(xzSplit, ly)
+#print(f"Hypothesis 1: {xzyH1}")
+#xzyH2 = bhc.eval_H2(xzSplit, ly)
+#print(f"Hypothesis 2: {xzyH2}")
+#xzyPost = bhc.posterior_join_k(xzSplit, ly)
+#print(f"Posterior probability for cluster k: {xzyPost}\n")

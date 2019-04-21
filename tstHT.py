@@ -65,8 +65,8 @@ empX = clustData.iloc[1:10,0:2].values
 empXtX = empX.T @ empX
 
 allParams = {
-    "clusterConcentrationPrior" : {"alpha" : 1},
-    "diffuseWishPrior" : {"df" : 1, "scale" : 1}, # wishart params
+    "clusterConcentrationPrior" : {"alpha" : 2},
+    "diffuseInvWishPrior" : {"df" : 10, "scale" : empXtX}, # inv wishart params
     "diffuseNormPrior" : {"loc" : np.mean(clustData.iloc[:,0:2], axis = 0),
                           "scale" : empXtX,
                           "meanscale" : 1}, # mvtnormal params

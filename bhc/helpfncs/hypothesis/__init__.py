@@ -1,6 +1,7 @@
 import numpy as np
-from scipy import stats
 import scipy.linalg as la
+from scipy import stats
+from functools import reduce
 from scipy.special import gamma, loggamma
 
 
@@ -32,38 +33,38 @@ def eval_H1(ci, cj):
     N, k = X.shape
     m = ci.priorParams["diffuseNormPrior"]["loc"]
     r = ci.priorParams["diffuseNormPrior"]["meanscale"]
-    v = ci.priorParams["diffuseWishPrior"]["df"]
-    S = ci.priorParams["diffuseWishPrior"]["scale"]
+    v = ci.priorParams["diffuseInvWishPrior"]["df"]
+    S = ci.priorParams["diffuseInvWishPrior"]["scale"]
     
     ## version of eval_H1 from Heller appendix
     # posterior precision matrix
     Xrowsum = np.sum(X, axis = 0) # calc once for efficiency
     
-    S_prime = (
-        S + np.dot(X.T, X) + (r * N * np.dot(m, m.T)) / (N + r) + 
+    Sprime = (
+        S + np.dot(X.T, X) + (r * N / (N + r)) * np.dot(m, m.T) + 
         (1 / (N + r)) * np.dot(Xrowsum, Xrowsum.T) +
         (r / (N + r)) * (np.dot(m, Xrowsum.T) + np.dot(Xrowsum, m.T))
     )
 
-    v_prime = v + N
+    vprime = v + N
 
-    # components of log(p(D_k | H_1))
-    log_pr_D_H1 = (
-        np.log(
-            (2 * np.pi)**(-N * k / 2) * 
-            (r / (N + r)**(k / 2) *
-            la.det(S)**(v / 2) * 
-            la.det(S_prime)**(-v_prime / 2))
-            ) + # end of first log
-        np.log(2**(v_prime * k / 2)) +
-        np.sum(loggamma((np.repeat(v_prime + 1, k) - np.arange(1, k)) / 2)) -
-        (
-        np.log(2**(v * k / 2)) +
-        np.sum(loggamma((np.repeat(v + 1, k) - np.arange(1, k)) / 2))
-        )
+    # components of p(D_k | H_1)
+    numer = [gamma((vprime + 1 - d) / 2) for d in range(1, k + 1)]
+    numer = reduce(lambda x, y: x * y, numer)
+    denom = [gamma((v + 1 - d) / 2) for d in range(1, k + 1)]
+    denom = reduce(lambda x, y: x * y, denom)
+    
+    fact = (2 ** (vprime*k/2) / 2 ** (v*k/2)) * (numer / denom)
+    
+    MarginalLikelihood = (
+        (2 * np.pi) ** (-N * k / 2) *
+        (r / (N + r)) ** (k / 2) *
+        la.det(S) ** (v / 2) *
+        la.det(Sprime) ** (vprime / 2) *
+        fact
     )
-            
-    return np.exp(log_pr_D_H1)
+    
+    return MarginalLikelihood
 
 ###############################################################################
 
@@ -76,6 +77,7 @@ def eval_H2(ci, cj):
     return ci.margLik * cj.margLik
     
 ###############################################################################
+
 
 def prop_pi_k(ci, cj):
     """
@@ -102,6 +104,7 @@ def prop_pi_k(ci, cj):
 
 ###############################################################################
 
+
 def marginal_clust_k(ci, cj):
     """
     calculate the marginal likelihood for cluster k
@@ -125,6 +128,7 @@ def marginal_clust_k(ci, cj):
 
 
 ###############################################################################
+
 
 def posterior_join_k(ci, cj):
     """
