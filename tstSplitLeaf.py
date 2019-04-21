@@ -33,7 +33,7 @@ mu3 = np.array([8, 12])
 cov3 = np.array([3.4, 0, 0, 5.1]).reshape(2, 2)
 
 # multinom params
-p1 = 0.2
+p1 = 0.4
 p2 = 0
 p3 = 1 - p2 - p1
 
@@ -61,14 +61,15 @@ clustData = pd.DataFrame(dat)
 # Gaussian Distribution - loc is mean; scale is sd
 # Gamma Distribution - a is shape; scale is rate; leave loc at 0
 
-empX = clustData.iloc[1:10,0:2].values
+empX = rnd.multivariate_normal(mu1, cov1, 3)
 empXtX = empX.T @ empX
 
 allParams = {
-    "clusterConcentrationPrior" : {"alpha" : 10},
-    "diffuseWishPrior" : {"df" : 1, "scale" : 1}, # wishart params
-    "diffuseNormPrior" : {"loc" : np.mean(clustData.iloc[:,0:2], axis = 0),
-                          "scale" : empXtX}, # mvtnormal params
+    "clusterConcentrationPrior" : {"alpha" : 1},
+    "diffuseWishPrior" : {"df" : 1, "scale" : empXtX}, # wishart params
+    "diffuseNormPrior" : {"loc" : mu1,
+                          "scale" : cov1,
+                          "meanscale" : 1}, # mvtnormal params
 }
 
 ### subset of test data points ###
@@ -76,6 +77,10 @@ allParams = {
 x = empX[0, :]
 y = empX[1, :]
 z = empX[2, :]
+
+print(f"data point x:\n{x} ")
+print(f"data point y:\n{y} ")
+print(f"data point z:\n{z} ")
 
 # assign some leaves
 lx = bhc.Leaf(x, allParams)

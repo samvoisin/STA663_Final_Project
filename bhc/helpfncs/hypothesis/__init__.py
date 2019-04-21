@@ -3,6 +3,7 @@ from scipy import stats
 import scipy.linalg as la
 from scipy.special import gamma, loggamma
 
+
 ### hypothesis evaluation helper functions ###
 
 def eval_H1(ci, cj):
@@ -29,9 +30,9 @@ def eval_H1(ci, cj):
     X = np.vstack([ci.clust, cj.clust])
     N, k = X.shape
     m = ci.priorParams["diffuseNormPrior"]["loc"]
-    S = ci.priorParams["diffuseNormPrior"]["scale"]
+    r = ci.priorParams["diffuseNormPrior"]["meanscale"]
     v = ci.priorParams["diffuseWishPrior"]["df"]
-    r = ci.priorParams["diffuseWishPrior"]["scale"]
+    S = ci.priorParams["diffuseWishPrior"]["scale"]
     
     ## version of eval_H1 from Heller appendix
     # posterior precision matrix
@@ -45,9 +46,7 @@ def eval_H1(ci, cj):
 
     v_prime = v + N
 
-    # Jonathan - I rearanged this a bit so I could see what was going on piece by piece
-    # feel free to modify. Still pretty rough to look at... helper fcns?
-    # write out components of log(p(D_k | H_1)) - broken up since it's so long   
+    # components of log(p(D_k | H_1))
     log_pr_D_H1 = (
         np.log(
             (2 * np.pi)**(-N * k / 2) * 
@@ -145,15 +144,3 @@ def posterior_join_k(ci, cj):
     rk = pik * ijH1 / ijMarg
 
     return rk
-
-
-
-
-
-
-
-
-
-
-
-

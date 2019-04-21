@@ -13,7 +13,7 @@ class Leaf:
         class attributes:
         tier - level of the tree where the split occurs; leaves are tier 1
 		alpha - cluster concentration parameter controlling
-        probability of creating a new cluster k
+        probability of creating a new cluster k; dirichlet scaling factor
         margLik - prob of data under tree (i.e. p(Dk | Tk)); 1 for leaves
 		clust - non-nested data points in cluster; leaves have clust size 1
 		clustsize - number of data points in cluster; leaves have clust size 1
@@ -28,3 +28,4 @@ class Leaf:
         self.clustsize = 1
         self.d = self.alpha
         self.pi = 1
+        self.postMergProb = 1

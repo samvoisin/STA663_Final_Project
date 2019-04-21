@@ -21,7 +21,7 @@ class Split:
         alpha - cluster concentration parameter controls
         prob of creating the new cluster k; inverited from previous Split/ Leaf
         tier - level of the tree where the split occurs
-		alpha - prior on number of clusters; unchanged for entire tree (prior)
+		alpha - dirichlet process scaling factor; unchanged for entire tree
 		clust - non-nested data points in cluster
 		clustsize - number of data points in cluster
 		d - tree depth parameter(?)
