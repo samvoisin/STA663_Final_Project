@@ -1,6 +1,6 @@
 from bhc.split import Split
 from bhc.leaf import Leaf
-from bhc.helpfncs.bhctree import form_new_tier, get_max_posterior
+from bhc.helpfncs.bhctree import *
 
 ### I think we may need some sort of nested structure here. not sure if tier-ing is enough...
 class HierarchyTree:
@@ -49,7 +49,23 @@ class HierarchyTree:
     def prune_tree(self, rk = 0.5):
         """
         Cut the tree at points where the posterior merge probability < rk
+        starting from top tier and going to bottom
         rk - posterior merge probability cut threshold; defaults to 0.5
         """
-        pass
+        revTiers = list(range(self.tierNum))
+        revTiers.reverse()
+        for t in revTiers:
+            snip_splits(self.tree[t], rk)
+
             
+
+
+
+
+
+
+
+
+
+
+

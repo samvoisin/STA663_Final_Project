@@ -41,6 +41,24 @@ def form_new_tier(tier, ck):
     
     newTier = {k : v for k, v in tier.items() if k not in ck}
     # insert cluster k into newTier w/ smallest num identifier
-    newTier[min(ck)] = clusterk
+    newTier[(ck[0], ck[1])] = clusterk
 
     return newTier
+
+###############################################################################
+
+
+def snip_splits(tier, rk):
+    """
+    Snip all joins in a tier with posterior merge probabilities < rk
+    """
+    for k, v in tier.items():
+        print(k, v)
+
+
+
+
+
+
+
+        

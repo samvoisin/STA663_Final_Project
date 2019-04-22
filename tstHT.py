@@ -61,8 +61,12 @@ clustData = pd.DataFrame(dat)
 # Gaussian Distribution - loc is mean; scale is sd
 # Gamma Distribution - a is shape; scale is rate; leave loc at 0
 
-empX = clustData.iloc[1:10,0:2].values
+empX = clustData.iloc[:10, 0:2].values
 empXtX = empX.T @ empX
+
+#plt.scatter(empX[: , 0], empX [: , 1])
+#plt.show()
+
 
 allParams = {
     "clusterConcentrationPrior" : {"alpha" : 2},
@@ -88,3 +92,6 @@ for k, v in ht.tree.items():
     for g, h in ht.tree[k].items():
         print(f"\ncluster number: {g}")
         print(f"cluster posterior:\n {h.postMergProb}\n")
+
+
+ht.prune_tree()
