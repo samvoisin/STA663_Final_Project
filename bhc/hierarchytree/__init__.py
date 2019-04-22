@@ -24,7 +24,6 @@ class HierarchyTree:
         class attributes:
         clustCount - number of non-joined trees; incremented -1 each iter
         leaves - initial clusters of single points stored in dictionary
-        tierNum - current level of tree (int); incremented +1 each iter
         currTier - current tier of tree being tested
         clusterList - list of unjoined/ independent clusters remaining to
         be tested for merge
@@ -33,7 +32,6 @@ class HierarchyTree:
         """
         self.clustCount = X.shape[0]
         self.leaves = {n : Leaf(i, n, allParams) for n, i in enumerate(X)}
-        self.tierNum = 0
         self.currTier = self.leaves
         self.tree = {0 : self.leaves} # tier 0 is Leaf tier
         self.clusterList = [Leaf(i, n, allParams) for n, i in enumerate(X)]
@@ -48,12 +46,16 @@ class HierarchyTree:
         """
         while len(self.clusterList) > 1:
             # proposed clusters
-            propClusts = [Split(c[0], c[1]) for c in combinations(self.clusterList, 2)]
+            propClusts = [
+                Split(c[0], c[1]) for c in combinations(self.clusterList, 2)
+            ]
             clustk = get_max_posterior(propClusts) # highest posterior cluster
             if clustk.tier in self.tree.keys():
                 self.tree[clustk.tier].update({clustk.clustid : clustk})
             else:
-                self.tree[clustk.tier] = self.tree.get(clustk.tier, {clustk.clustid : clustk})
+                self.tree[clustk.tier] = self.tree.get(
+                    clustk.tier, {clustk.clustid : clustk}
+                )
             self.clusterList = update_cluster_list(self.clusterList, clustk)
 
         
@@ -63,8 +65,10 @@ class HierarchyTree:
         starting from top tier and going to bottom
         rk - posterior merge probability cut threshold; defaults to 0.5
         """
-        revTiers = list(range(self.tierNum + 1))
-        revTiers.reverse()
-        for t in revTiers:
-            # if top tier merge is unjustified it should be immediately removed...
-            snip_splits(self.tree[t], rk)
+        tiers = [t for t in self.tree.keys()]
+        tiers.reverse() # ordered, descending integers for tiers
+        for t in tiers:
+            cutPoints = find_bad_merges(self.tree[t], rk)
+            snip_splits(self.tree[t], cutPoints)
+
+

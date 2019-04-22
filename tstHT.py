@@ -80,15 +80,19 @@ allParams = {
 ### subset of test data points ###
 
 ht = bhc.HierarchyTree(empX, allParams)
-print(f"Initial tier:\n{ht.currTier}")
 
-print(f"Growing tree...\n")
+
 ht.grow_tree()
 
-print(f"Tree complete. Clusters from bottom up")
-
+print(f"Growing tree...\n")
 for k, v in ht.tree.items():
     print(k)
     print(v)
 
-#ht.prune_tree()
+ht.prune_tree()
+
+print("Prune:\n")
+for k, v in ht.tree.items():
+    print(k)
+    print(v)
+
