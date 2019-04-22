@@ -21,17 +21,21 @@ class Split:
         alpha - cluster concentration parameter controls
         prob of creating the new cluster k; inverited from previous Split/ Leaf
         tier - level of the tree where the split occurs
-		alpha - dirichlet process scaling factor; unchanged for entire tree
-		clust - non-nested data points in cluster
-		clustsize - number of data points in cluster
-		d - tree depth parameter(?)
-		pi - prob of merging clusters i and j
+        alpha - cluster concentration parameter controlling
+        probability of creating a new cluster k; dirichlet scaling factor
+        clust - non-nested data points in cluster
+        clustid - tuple of id numbers used to identify subclusters as
+        algorithm progresses; see "tree consistent" in BHC paper
+        clustsize - number of data points in cluster
+        d - tree depth parameter(?)
+        pi - prob of merging clusters i and j
         margLik - prob of data under tree (i.e. p(Dk | Tk))
         postMergProb - posterior probability for cluster k; referred to as rk
         in Heller and Ghahramani BHC paper
         """
         self.left = clusti
         self.right = clustj
+        self.clustid = (self.left.clustid, self.right.clustid)
         self.priorParams = clusti.priorParams
         self.alpha = clusti.alpha
         self.tier = max(clusti.tier, clustj.tier) + 1
@@ -40,9 +44,9 @@ class Split:
         
         # calculate new d_k
         self.d = (
-        	self.alpha * gamma(self.clustsize) +
-        	clusti.d * clustj.d
-        	)
+            self.alpha * gamma(self.clustsize) +
+            clusti.d * clustj.d
+            )
         
         # calculate new pi_k
         self.pi = self.alpha * gamma(self.clustsize) / self.d
@@ -52,18 +56,4 @@ class Split:
 
         # calculate posterior merge probability for this cluster (i.e. rk)
         self.postMergProb = posterior_join_k(self.left, self.right)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        

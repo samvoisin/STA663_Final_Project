@@ -85,13 +85,10 @@ print(f"Initial tier:\n{ht.currTier}")
 print(f"Growing tree...\n")
 ht.grow_tree()
 
-print(f"Tree complete. Clusters from bottom up:")
+print(f"Tree complete. Clusters from bottom up")
+
 for k, v in ht.tree.items():
-    print(f"tree tier: {k}")
-    print(f"sub-clusters in tier {k} follow:")
-    for g, h in ht.tree[k].items():
-        print(f"\ncluster number: {g}")
-        print(f"cluster posterior:\n {h.postMergProb}\n")
+    print(k)
+    print(v)
 
-
-ht.prune_tree()
+#ht.prune_tree()
