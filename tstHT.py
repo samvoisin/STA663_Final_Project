@@ -61,7 +61,7 @@ clustData = pd.DataFrame(dat)
 # Gaussian Distribution - loc is mean; scale is sd
 # Gamma Distribution - a is shape; scale is rate; leave loc at 0
 
-empX = clustData.iloc[:10, 0:2].values
+empX = clustData.iloc[: , 0:2].values
 empXtX = empX.T @ empX
 
 #plt.scatter(empX[: , 0], empX [: , 1])
