@@ -2,6 +2,13 @@
 
 Deadline 30th April 2018 at 11:59 PM
 
+**Remaining To-Dos:**
+1) Model Summary - ideally something that works for both pre and post pruned trees
+2) Plots if possible
+3) Support for Beta-Binom and Dirichlet-Multinom
+4) Prediction
+5) More test cases
+
 ## Paper
 
 The paper should have the following:
