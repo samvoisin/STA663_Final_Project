@@ -49,6 +49,7 @@ class HierarchyTree:
                 Split(c[0], c[1]) for c in combinations(self.clusterList, 2)
             ]
             clustk = get_max_posterior(propClusts) # highest posterior cluster
+            print(clustk.postMergProb)
             if clustk.tier in self.tree.keys():
                 self.tree[clustk.tier].update({clustk.clustid : clustk})
             else:

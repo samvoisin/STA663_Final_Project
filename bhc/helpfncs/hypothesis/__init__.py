@@ -47,8 +47,8 @@ def eval_H1(ci, cj):
     )
     
     #debugging
-    print(Sprime)
-    print(la.det(Sprime))
+    #print(Sprime)
+    #print(la.det(Sprime))
 
     vprime = v + N
 
