@@ -84,15 +84,17 @@ ht = bhc.HierarchyTree(empX, allParams)
 
 ht.grow_tree()
 
-print(f"Growing tree...\n")
-for k, v in ht.tree.items():
-    print(k)
-    print(v)
+print(f"\nGrowing tree...")
 
 ht.prune_tree()
 
-print("Prune:\n")
-for k, v in ht.tree.items():
-    print(k)
-    print(v)
+print("\nPruning tree...")
+
+print("\nTesting reporting...")
+ht.tier_summary(2)
+
+ht.tree_summary()
+
+
+
 

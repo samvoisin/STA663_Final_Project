@@ -56,4 +56,4 @@ class Split:
 
         # calculate posterior merge probability for this cluster (i.e. rk)
         self.postMergProb = posterior_join_k(self.left, self.right)
-        
+

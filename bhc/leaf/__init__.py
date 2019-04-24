@@ -25,12 +25,12 @@ class Leaf:
         pi - probability of cluster k existing
         """
         self.tier = 0
+        self.alpha = priorParams["clusterConcentrationPrior"]["alpha"]
         self.priorParams = priorParams
-        self.alpha = self.priorParams["clusterConcentrationPrior"]["alpha"]
         self.margLik = 1
         self.clust = np.array([pt])
         self.clustid = clustid
         self.clustsize = 1
         self.d = self.alpha
         self.pi = 1
-        self.postMergProb = 1
+        self.postMergProb = 1.0

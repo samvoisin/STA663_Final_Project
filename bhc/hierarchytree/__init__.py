@@ -3,7 +3,6 @@ from bhc.split import Split
 from bhc.leaf import Leaf
 from bhc.helpfncs.hierarchytree import *
 
-from itertools import combinations
 
 class HierarchyTree:
     """
@@ -71,4 +70,21 @@ class HierarchyTree:
             cutPoints = find_bad_merges(self.tree[t], rk)
             snip_splits(self.tree[t], cutPoints)
 
-
+    def tier_summary(self, tiernum):
+        """
+        summarize a tier
+        """
+        print(f"Summary for tier {tiernum}:")
+        print("-------------------------------")
+        print(f"Number of clusters: {len(self.tree[tiernum].values())}")
+        for n, c in enumerate(self.tree[tiernum].values()):
+            print(f"  Cluster {n} size: {c.clustsize}")
+            print(f"\t Posterior merge probability: {c.postMergProb:.2}")
+        print("\n")
+        
+    def tree_summary(self):
+        """
+        summarize tree structure
+        """
+        for n in self.tree.keys():
+            self.tier_summary(n)
