@@ -57,14 +57,14 @@ def eval_H1(ci, cj):
     fact = (2 ** (vprime*k/2) / 2 ** (v*k/2)) * (numer / denom)
     
     MarginalLikelihood = (
-        (2 * np.pi) ** (-N * k / 2) *
-        (r / (N + r)) ** (k / 2) *
-        la.det(S) ** (v / 2) *
-        la.det(Sprime) ** (vprime / 2) *
-        fact
+        (-N * k / 2) * np.log(2 * np.pi) +
+        (k / 2) * np.log(r / (N + r)) +
+        (v / 2) * np.log(la.det(S)) +
+        (-vprime / 2) * np.log(la.det(Sprime)) +
+        np.log(fact)
     )
     
-    return MarginalLikelihood
+    return np.exp(MarginalLikelihood)
 
 ###############################################################################
 
