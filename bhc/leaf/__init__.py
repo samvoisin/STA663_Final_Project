@@ -3,8 +3,8 @@ import numpy as np
 
 class Leaf:
     """Leaf class contains information for each data point at tier 1 level"""
-    
-    def __init__(self, pt, clustid, priorParams):
+
+    def __init__(self, pt, clustid, priorParams, family):
         """initialize Leaf object
         class parameters:
         pt - an individual data point stored as a len 1 np array
@@ -24,6 +24,7 @@ class Leaf:
         d - tree density parameter(?)
         pi - probability of cluster k existing
         """
+        self.family = family
         self.tier = 0
         self.alpha = priorParams["clusterConcentrationPrior"]["alpha"]
         self.priorParams = priorParams

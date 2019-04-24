@@ -35,6 +35,7 @@ class Split:
         """
         self.left = clusti
         self.right = clustj
+        self.family = clusti.family
         self.clustid = (self.left.clustid, self.right.clustid)
         self.priorParams = clusti.priorParams
         self.alpha = clusti.alpha
@@ -57,3 +58,5 @@ class Split:
         # calculate posterior merge probability for this cluster (i.e. rk)
         self.postMergProb = posterior_join_k(self.left, self.right)
 
+
+        
