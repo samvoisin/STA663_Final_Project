@@ -41,10 +41,14 @@ def eval_H1(ci, cj):
     Xrowsum = np.sum(X, axis = 0) # calc once for efficiency
     
     Sprime = (
-        S + np.dot(X.T, X) + (r * N / (N + r)) * np.dot(m, m.T) - 
+        np.dot(X.T, X) + (r * N / (N + r)) * np.dot(m, m.T) + 
         (1 / (N + r)) * np.dot(Xrowsum, Xrowsum.T) -
-        (r / (N + r)) * (np.dot(m, Xrowsum.T) + np.dot(Xrowsum, m.T))
+        (r / (N + r)) * (np.dot(m, Xrowsum.T) + np.dot(Xrowsum, m.T)) + S
     )
+    
+    #debugging
+    print(Sprime)
+    print(la.det(Sprime))
 
     vprime = v + N
 
@@ -55,6 +59,7 @@ def eval_H1(ci, cj):
     denom = reduce(lambda x, y: x * y, denom)
     
     fact = (2 ** (vprime*k/2) / 2 ** (v*k/2)) * (numer / denom)
+    
     
     MarginalLikelihood = (
         (-N * k / 2) * np.log(2 * np.pi) +
