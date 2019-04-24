@@ -41,8 +41,8 @@ def eval_H1(ci, cj):
     Xrowsum = np.sum(X, axis = 0) # calc once for efficiency
     
     Sprime = (
-        S + np.dot(X.T, X) + (r * N / (N + r)) * np.dot(m, m.T) + 
-        (1 / (N + r)) * np.dot(Xrowsum, Xrowsum.T) +
+        S + np.dot(X.T, X) + (r * N / (N + r)) * np.dot(m, m.T) - 
+        (1 / (N + r)) * np.dot(Xrowsum, Xrowsum.T) -
         (r / (N + r)) * (np.dot(m, Xrowsum.T) + np.dot(Xrowsum, m.T))
     )
 
