@@ -28,10 +28,10 @@ class Leaf:
         self.tier = 0
         self.alpha = priorParams["clusterConcentrationPrior"]["alpha"]
         self.priorParams = priorParams
-        self.margLik = 1
+        self.margLik = 1.0
         self.clust = np.array([pt])
         self.clustid = clustid
-        self.clustsize = 1
+        self.clustsize = 1.0
         self.d = self.alpha
-        self.pi = 1
+        self.pi = 1.0
         self.postMergProb = 1.0
