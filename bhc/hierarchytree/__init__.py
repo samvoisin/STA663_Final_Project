@@ -76,8 +76,22 @@ class HierarchyTree:
         tiers = [t for t in self.tree.keys()]
         tiers.reverse() # ordered, descending integers for tiers
         for t in tiers:
-            cutPoints = find_bad_merges(self.tree[t], rk)
-            snip_splits(self.tree[t], cutPoints)
+            cutPoints = find_bad_merges(self.tree[t], rk) # see HT helpers
+            snip_splits(self.tree[t], cutPoints) # see HT helpers
+
+        # remove snipped Split objects
+        emptyTiers = []
+        for t in tiers:
+            clear_trimmings(self.tree[t], rk) # see HT helpers
+            # track empty tiers
+            if len(self.tree[t].keys()) == 0:
+                emptyTiers.append(t)
+
+        # drop tiers containing no Split objects
+        for et in emptyTiers:
+            self.tree.pop(et)
+
+
 
     def tier_summary(self, tiernum):
         """
@@ -93,7 +107,9 @@ class HierarchyTree:
 
     def tree_summary(self):
         """
-        summarize tree structure
+        summarize tree structure from highest tier to lowest
         """
-        for n in self.tree.keys():
+        tiers = [t for t in self.tree.keys()]
+        tiers.reverse() # ordered, descending integers for tiers
+        for n in tiers:
             self.tier_summary(n)
