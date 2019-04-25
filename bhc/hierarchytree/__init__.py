@@ -35,10 +35,14 @@ class HierarchyTree:
         """
         self.family = family
         self.clustCount = X.shape[0]
-        self.leaves = {n : Leaf(i, n, allParams, self.family) for n, i in enumerate(X)}
+        self.leaves = {
+            n : Leaf(i, n, allParams, self.family) for n, i in enumerate(X)
+            }
         self.currTier = self.leaves
         self.tree = {0 : self.leaves} # tier 0 is Leaf tier
-        self.clusterList = [Leaf(i, n, allParams, self.family) for n, i in enumerate(X)]
+        self.clusterList = [
+            Leaf(i, n, allParams, self.family) for n, i in enumerate(X)
+            ]
         self.tierList = [self.tree.keys()]
 
 
