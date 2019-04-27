@@ -37,6 +37,7 @@ class Split:
         self.right = clustj
         self.family = clusti.family
         self.clustid = (self.left.clustid, self.right.clustid)
+        self.idset = clusti.idset.union(clustj.idset)
         self.priorParams = clusti.priorParams
         self.alpha = clusti.alpha
         self.tier = max(clusti.tier, clustj.tier) + 1

@@ -34,6 +34,7 @@ class HierarchyTree:
         key is tier number and value is tier
         """
         self.family = family
+        self.data = X
         self.clustCount = X.shape[0]
         self.leaves = {
             n : Leaf(i, n, allParams, self.family) for n, i in enumerate(X)
@@ -43,7 +44,7 @@ class HierarchyTree:
         self.clusterList = [
             Leaf(i, n, allParams, self.family) for n, i in enumerate(X)
             ]
-        self.tierList = [self.tree.keys()]
+        self.tierList = [t for t in self.tree.keys()]
 
 
     def grow_tree(self):
@@ -65,6 +66,9 @@ class HierarchyTree:
                     clustk.tier, {clustk.clustid : clustk}
                 )
             self.clusterList = update_cluster_list(self.clusterList, clustk)
+
+        # generate list of tier numbers in tree
+        self.tierList = [t for t in self.tree.keys()]
 
 
     def prune_tree(self, rk = 0.5):
@@ -91,6 +95,8 @@ class HierarchyTree:
         for et in emptyTiers:
             self.tree.pop(et)
 
+        # update list of tier numbers in tree
+        self.tierList = [t for t in self.tree.keys()]
 
 
     def tier_summary(self, tiernum):
@@ -104,6 +110,7 @@ class HierarchyTree:
             print(f"  Cluster {n} size: {c.clustsize}")
             print(f"\t Posterior merge probability: {c.postMergProb:.2}")
         print("\n")
+
 
     def tree_summary(self):
         """

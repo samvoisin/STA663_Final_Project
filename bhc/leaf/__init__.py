@@ -31,6 +31,7 @@ class Leaf:
         self.margLik = 1.0
         self.clust = np.array([pt])
         self.clustid = clustid
+        self.idset = {clustid}
         self.clustsize = 1.0
         self.d = self.alpha
         self.pi = 1.0
