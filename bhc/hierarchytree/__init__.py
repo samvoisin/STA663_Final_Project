@@ -151,10 +151,16 @@ class HierarchyTree:
         idacctfor = set()
         c = 0 # cluster indicator
 
+        # initialize clustnum column with each vectors leaf level id
+        for n, v in self.leaves.items():
+            self.clustDF.loc[n, "clustnum"] = v.idset
+
         # iterate through each tier
         for t in self.tierList:
             # iterate through each Split in tier t
             for k, v in self.tree[t].items():
+                if t == 0:
+                    print(v.idset)
                 # the intersection of the previously clustered ids and the
                 # current cluster v is empty when points have not been labeled
                 if len(idacctfor.intersection(v.idset)) == 0:
