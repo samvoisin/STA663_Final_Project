@@ -1,3 +1,5 @@
+from pandas import DataFrame
+
 from itertools import combinations
 from bhc.split import Split
 from bhc.leaf import Leaf
@@ -120,3 +122,32 @@ class HierarchyTree:
         tiers.reverse() # ordered, descending integers for tiers
         for n in tiers:
             self.tier_summary(n)
+
+
+    def generate_clust_frame(self, tier_level = "top"):
+        """
+        generate pandas DataFrame object with a column of indicators for
+        which cluster the vector in that row belongs to
+        """
+        # generate column labels
+        labels = ["Dim_" + str(i) for i in range(self.data.shape[1])]
+        self.clustDF = DataFrame(self.data, columns = labels)
+        # initialize empty set to track vectors whose id has been accounted for
+        idacctfor = set()
+        c = 0 # cluster indicator
+
+        # iterate through each tier from top down
+        for t in self.tierList:
+            # iterate through each Split in tier t
+            for k, v in self.tree[t].items():
+                # the intersection of the previously clustered ids and the
+                # current cluster v is empty when points have not been labeled
+                if len(idacctfor.intersection(v.idset)) == 0:
+                    idacctfor = idacctfor.union(v.idset)
+                else:
+                    # label points 
+                    for i in idacctfor.intersection(v.idset):
+                        # assign cluster number for each point in cluster
+                        # this goes from bottom to top of tree
+                        self.clustDF.loc[i, "clustnum"] = c
+                    c += 1 # update to provide a new value for the next cluster
