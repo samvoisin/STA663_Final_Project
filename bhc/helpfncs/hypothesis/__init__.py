@@ -59,15 +59,19 @@ def prop_pi_k(ci, cj):
     # cluster size from proposed cluster k
     propClustSize = ci.clustsize + cj.clustsize
 
+    # gamma fcn for the proposed cluster size 
+    # calculating once for efficiency
+    gammaPCS = gamma(propClustSize)
+
     # d_k for proposed cluster k
     propd = (
         	ci.alpha *
-            gamma(propClustSize) +
+            gammaPCS +
         	ci.d * cj.d
         	)
 
     # probability of creating proposed cluster k
-    pik = ci.alpha * gamma(propClustSize) / propd
+    pik = ci.alpha * gammaPCS / propd
 
     return pik
 
@@ -80,6 +84,9 @@ def marginal_clust_k(ci, cj):
     calculate the marginal likelihood for cluster k
     This is the 'evidence' in Bayes Rule; called P(D_k | T_k) in paper
     ci and cj - clusters being tested for merge
+
+    This function also returns the probability of the merge
+    hypothesis - pH1; this is done for efficiency
     """
     
     # calculate probability of creating proposed cluster k
@@ -94,7 +101,7 @@ def marginal_clust_k(ci, cj):
     # calculate marginal likelihood of cluster k
     marginalLikelihood = pik * pH1 + (1 - pik) * pH2
 
-    return marginalLikelihood
+    return pH1, marginalLikelihood
 
 
 ###############################################################################
@@ -106,11 +113,8 @@ def posterior_join_k(ci, cj):
     ci and cj - clusters being tested for merge
     """
 
-    # hypothesis 1 for cluster i and cluster j
-    ijH1 = eval_H1(ci, cj)
-
     # marginal likelihood for cluster k; hypothesis 2 calculated within
-    ijMarg = marginal_clust_k(ci, cj)
+    ijH1, ijMarg = marginal_clust_k(ci, cj)
 
     # calculate probability of creating proposed cluster k
     pik = prop_pi_k(ci, cj)

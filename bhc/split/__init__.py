@@ -54,7 +54,7 @@ class Split:
         self.pi = self.alpha * gamma(self.clustsize) / self.d
 
         # calculate marginal likelihood for this cluster (i.e. p(Dk | Tk))
-        self.margLik = marginal_clust_k(self.left, self.right)
+        self.pH1, self.margLik = marginal_clust_k(self.left, self.right)
 
         # calculate posterior merge probability for this cluster (i.e. rk)
         self.postMergProb = posterior_join_k(self.left, self.right)

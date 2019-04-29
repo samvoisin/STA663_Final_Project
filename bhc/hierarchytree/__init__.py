@@ -101,7 +101,7 @@ class HierarchyTree:
         self.tierList = [t for t in self.tree.keys()]
 
 
-    def tier_summary(self, tiernum):
+    def tier_summary(self, tiernum = "top"):
         """
         summarize a tier
         """
@@ -136,8 +136,11 @@ class HierarchyTree:
         idacctfor = set()
         c = 0 # cluster indicator
 
-        # iterate through each tier from top down
-        for t in self.tierList:
+        if tier_level == "top":
+            tier_level = max(self.tierList)
+
+        # iterate through each tier
+        for t in range(tier_level + 1):
             # iterate through each Split in tier t
             for k, v in self.tree[t].items():
                 # the intersection of the previously clustered ids and the
@@ -151,3 +154,4 @@ class HierarchyTree:
                         # this goes from bottom to top of tree
                         self.clustDF.loc[i, "clustnum"] = c
                     c += 1 # update to provide a new value for the next cluster
+
