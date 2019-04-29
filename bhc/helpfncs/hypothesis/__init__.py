@@ -64,7 +64,10 @@ def prop_pi_k(ci, cj):
     gammaPCS = gamma(propClustSize)
 
     # d_k for proposed cluster k
-    propd = (
+    if propClustSize == 2: # when joining two singletons
+        propd = ci.alpha
+    else:
+        propd = (
         	ci.alpha *
             gammaPCS +
         	ci.d * cj.d
@@ -115,11 +118,17 @@ def posterior_join_k(ci, cj):
 
     # marginal likelihood for cluster k; hypothesis 2 calculated within
     ijH1, ijMarg = marginal_clust_k(ci, cj)
+    print("ijH1, ijMarg", ijH1, ijMarg)
 
     # calculate probability of creating proposed cluster k
     pik = prop_pi_k(ci, cj)
+    print("pik", pik)
 
     # posterior probability for creating cluster k from ci and cj
-    rk = pik * ijH1 / ijMarg
+    tol = 1e-60 # if marginal probability approaches zero
+    if ijMarg < tol:
+        rk = 0.0 # set rk == 0 to prevent num errors. will be pruned. 
+    else:
+        rk = pik * ijH1 / ijMarg
 
     return rk

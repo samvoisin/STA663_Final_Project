@@ -47,12 +47,14 @@ def norm_inv_wish_H1(ci, cj):
     vprime = v + N
 
     # components of p(D_k | H_1)
-    numer = [gamma((vprime + 1 - d) / 2) for d in range(1, k + 1)]
-    numer = reduce(lambda x, y: x * y, numer)
-    denom = [gamma((v + 1 - d) / 2) for d in range(1, k + 1)]
-    denom = reduce(lambda x, y: x * y, denom)
+    numer = [loggamma((vprime + 1 - d) / 2) for d in range(1, k + 1)]
+    #numer = reduce(lambda x, y: x * y, numer)
+    numer = np.sum(numer)
+    denom = [loggamma((v + 1 - d) / 2) for d in range(1, k + 1)]
+    #denom = reduce(lambda x, y: x * y, denom)
+    denom = np.sum(denom)
     
-    fact = (2 ** (vprime*k/2) / 2 ** (v*k/2)) * (numer / denom)
+    logfact = (vprime*k/2)*np.log(2) + numer - (v*k/2)*np.log(2) - denom
     
     
     MarginalLikelihood = (
@@ -60,7 +62,7 @@ def norm_inv_wish_H1(ci, cj):
         (k / 2) * np.log(r / (N + r)) +
         (v / 2) * np.log(la.det(S)) +
         (-vprime / 2) * np.log(la.det(Sprime)) +
-        np.log(fact)
+        logfact
     )
     
     return np.exp(MarginalLikelihood)
