@@ -60,6 +60,7 @@ class HierarchyTree:
             propClusts = [
                 Split(c[0], c[1]) for c in combinations(self.clusterList, 2)
             ]
+
             clustk = get_max_posterior(propClusts) # highest posterior cluster
             if clustk.tier in self.tree.keys():
                 self.tree[clustk.tier].update({clustk.clustid : clustk})
@@ -100,6 +101,20 @@ class HierarchyTree:
         # update list of tier numbers in tree
         self.tierList = [t for t in self.tree.keys()]
 
+        # remove tiers containing only one leaf
+        snglLeafTiers = []
+        for tier, branch in self.tree.items():
+            if len(branch) == 1:
+                for cid, spl in branch.items():
+                    if spl.clustsize == 1:
+                        snglLeafTiers.append(tier)
+
+        for st in snglLeafTiers:
+            self.tree.pop(st)
+
+        # update list of tier numbers in tree
+        self.tierList = [t for t in self.tree.keys()]
+
 
     def tier_summary(self, tiernum = "top"):
         """
@@ -136,11 +151,8 @@ class HierarchyTree:
         idacctfor = set()
         c = 0 # cluster indicator
 
-        if tier_level == "top":
-            tier_level = max(self.tierList)
-
         # iterate through each tier
-        for t in range(tier_level + 1):
+        for t in self.tierList:
             # iterate through each Split in tier t
             for k, v in self.tree[t].items():
                 # the intersection of the previously clustered ids and the
@@ -153,5 +165,6 @@ class HierarchyTree:
                         # assign cluster number for each point in cluster
                         # this goes from bottom to top of tree
                         self.clustDF.loc[i, "clustnum"] = c
+                    print(c)
                     c += 1 # update to provide a new value for the next cluster
 
