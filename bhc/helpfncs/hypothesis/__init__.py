@@ -5,6 +5,7 @@ from functools import reduce
 from scipy.special import gamma, loggamma
 
 from bhc.helpfncs.distrs.normal_invwish import norm_inv_wish_H1
+from bhc.helpfncs.distrs.beta_bern import beta_bern_H1
 
 
 ### hypothesis evaluation helper functions ###
@@ -32,6 +33,8 @@ def eval_H1(ci, cj):
     if ci.family == "norm-invwish":
         marginalLikelihood = norm_inv_wish_H1(ci, cj)
     elif ci.family == "beta-bern":
+        marginalLikelihood = beta_bern_H1(ci, cj)
+    else:
         pass
 
     return marginalLikelihood
@@ -64,7 +67,10 @@ def prop_pi_k(ci, cj):
     gammaPCS = gamma(propClustSize)
 
     # d_k for proposed cluster k
-    propd = (
+    if propClustSize == 2: # joining two singletons
+        propd = ci.alpha
+    else:
+        propd = (
         	ci.alpha *
             gammaPCS +
         	ci.d * cj.d

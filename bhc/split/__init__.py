@@ -51,10 +51,10 @@ class Split:
             )
         
         # calculate new pi_k
-        if np.isnan(self.alpha * gamma(self.clustsize) / self.d) == True:
-            self.pi = 1.0
-        else:
-            self.pi = self.alpha * gamma(self.clustsize) / self.d
+        #if np.isnan(self.alpha * gamma(self.clustsize) / self.d) == True:
+        #    self.pi = 1.0
+        #else:
+        self.pi = self.alpha * gamma(self.clustsize) / self.d
       
 
         # calculate marginal likelihood for this cluster (i.e. p(Dk | Tk))

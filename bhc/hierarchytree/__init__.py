@@ -48,7 +48,6 @@ class HierarchyTree:
             ]
         self.tierList = [t for t in self.tree.keys()]
 
-
     def grow_tree(self):
         """
         Grow the tree over the maximum possible number of iterations.

@@ -1,3 +1,8 @@
+import numpy as np
+import scipy.linalg as la
+from scipy import stats
+from scipy.special import gamma, loggamma
+
 def beta_bern_H1(ci, cj):
     """
     Evaluate hypothesis 1 for merging two clusters ci and cj.
