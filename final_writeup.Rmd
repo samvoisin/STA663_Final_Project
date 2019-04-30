@@ -15,13 +15,23 @@ Bayesian Hierarchical Clustering (BHC) is an agglomerative tree-based method for
 
 ## Background
 
-The core of the BHC algorithm relies on the comparison of two hypotheses:
+The core of the BHC algorithm relies on a Bayesian hypothesis test in which two alternatives are compared:
 
-1) $H_1$ is the hypothesis that two clusters $D_i$ and $D_j$ were generated from the same distribution $p(x | \theta)$ with the prior distribution for $\theta$ being $p(\theta | \beta)$. The probability of clusters $i$ and $j$ being generated from the same distribution is defined as $p(D_k|H_1)$.
+1) $H_1$ is the hypothesis that two clusters $D_i$ and $D_j$ were generated from the same distribution $p(x | \theta)$ with the prior distribution for $\theta$ being $p(\theta | \beta)$. The probability of clusters $i$ and $j$ being generated from the same distribution is defined as $p(D_k|H_1)$. The posterior for this hypothesis is:
 
-2) $H_2$ is the hypothesis that the two clusters $D_i$ and $D_j$ were generated from two independent distributions and therefore should *not* be joined together as cluster $D_k$. 
+$$
+r_k = \frac{\pi_k p(D_k|H_1)}{\pi_k p(D_k|H_1) + (1 - \pi_k) p(D_i|T_i)p(D_j|T_j)}
+$$
 
-We can model the postior 
+Note that $\pi_k$ is the prior probability of a merge occuring for clusters $i$ and $j$. This makes the denominator of this expression the *evidence* in the Bayesian paradigm.
+
+2) $H_2$ is the hypothesis that the two clusters $D_i$ and $D_j$ were generated from two independent distributions and therefore should *not* be joined together as cluster $D_k$. The probability of $H_2$ is calculated as $p(D_k|H_2) = p(D_i|T_i)p(D_j|T_j)$ where $T_i$ and $T_j$ are the subclusters being examined.
+
+All existing clusters are compared and joined based on the cluster with the highest posterior merge probability $r_k$. In our module this iterative action of comparing and merging clusters occurs in the `HierarchyTree` object. `HierarchyTree` is initialized by passing in the data matrix `X`, the parameters of the prior distributions, and the family of distributions. Currently, support for the Multivariate Normal-Inverse Wishart family exists with support for the Beta-Binomial and Multinomial-Dirichlet planned as the next steps in development of this module. The `HierarchyTree` is "grown" using the `grow_tree` method. This method is analogous to the `fit` method for a class in `sklearn`.
+
+One challenge of the BHC algorithm exists in the recursive calculation of $p(D_k|H_2)$. As the size of the dataset increases, the number of recursions must also increase as we continue to "grow" the `HierachyTree`. We quickly reach a point at which continued recursion becomes infeasible. To combat this problem we developed two additional classes for storing various information about a given cluster. An instance of the `Leaf` object is created for each data pont when the `HierarchyTree` is initialized. Once the `grow_tree` method is invoked instances of the `Split` object are created as clusters merge. The `Split` instances are designed to save the calculation of 
+
+All existing clusters are compared and joined based on the cluster with the highest posterior merge probability $r_k$. 
 
 ## The Algorithm
 
