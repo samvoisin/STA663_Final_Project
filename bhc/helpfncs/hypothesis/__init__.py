@@ -118,11 +118,9 @@ def posterior_join_k(ci, cj):
 
     # marginal likelihood for cluster k; hypothesis 2 calculated within
     ijH1, ijMarg = marginal_clust_k(ci, cj)
-    print("ijH1, ijMarg", ijH1, ijMarg)
 
     # calculate probability of creating proposed cluster k
     pik = prop_pi_k(ci, cj)
-    print("pik", pik)
 
     # posterior probability for creating cluster k from ci and cj
     tol = 1e-60 # if marginal probability approaches zero
