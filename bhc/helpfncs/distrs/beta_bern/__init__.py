@@ -29,10 +29,10 @@ def beta_bern_H1(ci, cj):
     
     # components of p(D_k | H_1)
     numer = [(loggamma(alpha + beta) + loggamma(alpha + m) + loggamma(beta + N - m)) for d in range(1, k + 1)]
-    numer = reduce(lambda x, y: x * y, numer)
+    numer = np.sum(numer)
     denom = [(loggamma(alpha) + loggamma(beta) + loggamma(alpha + beta + N)) for d in range(1, k + 1)]
-    denom = reduce(lambda x, y: x * y, denom)
+    denom = np.sum(denom)
     
-    MarginalLikelihood = numer/denom
+    MarginalLikelihood = numer - denom
     
     return MarginalLikelihood

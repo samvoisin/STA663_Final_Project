@@ -64,10 +64,7 @@ def prop_pi_k(ci, cj):
     gammaPCS = gamma(propClustSize)
 
     # d_k for proposed cluster k
-    if propClustSize == 2: # when joining two singletons
-        propd = ci.alpha
-    else:
-        propd = (
+    propd = (
         	ci.alpha *
             gammaPCS +
         	ci.d * cj.d
