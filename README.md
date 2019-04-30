@@ -30,10 +30,18 @@ The `generate_clust_frame` method will create an attribute in the `HierarchyTree
 
 #### Prior Parameters
 
+The bhc module currently supports the multivariate Gaussian-inverse Wishart and Beta-Bernoulli conjugate families of distributions. Support for the Dirichlet-Multinomial conjugate family is in development.
 
+Prior parameters for the multivariate Gaussian-inverse Wishart case should be structured as follows:
 
-
-
+    allParams = {
+        "clusterConcentrationPrior" : {"alpha" : 2},
+        "diffuseInvWishPrior" : {"df" : 10,
+                                 "scale" : np.eye(2)},
+        "diffuseNormPrior" : {"loc" : np.zeros(2),
+                              "scale" : np.eye(2),
+                              "meanscale" : 1}
+    }
 
 
 
