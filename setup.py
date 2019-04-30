@@ -7,6 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
 	name = "bhc",
+	version = "0.0.1",
 	author = "Sam Voisin & Jonathan Klus",
 	author_email = "sam.voisin@duke.edu & jonathan.klus@duke.edu",
 	description = "This package implements the bayesian hierarchical clustering algorithm described by K. Heller and Z. Ghahramani (2005)",
