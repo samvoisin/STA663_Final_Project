@@ -171,6 +171,5 @@ class HierarchyTree:
                         # assign cluster number for each point in cluster
                         # this goes from bottom to top of tree
                         self.clustDF.loc[i, "clustnum"] = c
-                    print(c)
                     c += 1 # update to provide a new value for the next cluster
 
