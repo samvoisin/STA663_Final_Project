@@ -28,7 +28,7 @@ The HierarchyTree class is the primary object in the bhc module. `HierarchyTree`
 
 The `generate_clust_frame` method will create an attribute in the `HierarchyTree` instance called `clustDF` which contains a pandas `DataFrame` object with the each row aligning to an input data point/ vector from the original data matrix `X` and an additional column designating the highest level cluster for a given data point/ vectors. **Note:** if this attribute is run before the `prune_tree` method, all data points will be in the same cluster. This is the nature of the BHC algorithm.
 
-#### Prior Parameters
+##### Prior Parameters
 
 The bhc module currently supports the multivariate Gaussian-inverse Wishart and Beta-Bernoulli conjugate families of distributions. Support for the Dirichlet-Multinomial conjugate family is in development.
 
