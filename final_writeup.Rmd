@@ -17,7 +17,7 @@ Bayesian Hierarchical Clustering (BHC) is an agglomerative tree-based method for
 
 The core of the BHC algorithm relies on the comparison of two hypotheses:
 
-1) $H_1$ is the hypothesis that two clusters $D_i$ and $D_j$ were generated from the same distribution $p(x | \theta)$ with the prior distribution for $\theta$ being $p(\theta | \beta)$. The probability of hypothesis $H_1$ is $p(D_k|H_1)$.
+1) $H_1$ is the hypothesis that two clusters $D_i$ and $D_j$ were generated from the same distribution $p(x | \theta)$ with the prior distribution for $\theta$ being $p(\theta | \beta)$. The probability of clusters $i$ and $j$ being generated from the same distribution is defined as $p(D_k|H_1)$.
 
 2) $H_2$ is the hypothesis that the two clusters $D_i$ and $D_j$ were generated from two independent distributions and therefore should *not* be joined together as cluster $D_k$. 
 
