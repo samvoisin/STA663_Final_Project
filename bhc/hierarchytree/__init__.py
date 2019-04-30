@@ -160,7 +160,7 @@ class HierarchyTree:
             # iterate through each Split in tier t
             for k, v in self.tree[t].items():
                 if t == 0:
-                    print(v.idset)
+                    pass #print(v.idset)
                 # the intersection of the previously clustered ids and the
                 # current cluster v is empty when points have not been labeled
                 if len(idacctfor.intersection(v.idset)) == 0:
