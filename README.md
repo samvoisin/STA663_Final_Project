@@ -2,7 +2,7 @@
 
 Bayesian Hierarchical Clustering (BHC) is an agglomerative tree-based method for identifying underlying population structures ("clusters"). BHC was introduced by K. Heller and Z. Ghahramani as a way to approximate the more computationally intensive infinite Gaussian mixture model.
 
-The advantage of these models over their counterparts lies in the fact that an *ex ante* number of clusters does not need to be specified. Instead, the Bayesian paradigm allows for regularized flexibility via a prior placed on the cluster concentration parameter $\alpha$. This module is build using bject-oriented programing (OOP) methodologies found in python to build a module that can be used similar manner to the popular scikit-learn library. As with many Bayesian methods, the increased flexibility of BHC comes at a computational cost and the increased risk of poor results due to misspecified priors. 
+The advantage of these models over their counterparts lies in the fact that an *ex ante* number of clusters does not need to be specified. Instead, the Bayesian paradigm allows for regularized flexibility via a prior placed on the cluster concentration parameter $\alpha$. This module is build using object-oriented programing (OOP) methodologies found in python to build a module that can be used similar manner to the popular scikit-learn library. As with many Bayesian methods, the increased flexibility of BHC comes at a computational cost and the increased risk of poor results due to misspecified priors. 
 
 ---
  
