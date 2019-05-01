@@ -1,9 +1,10 @@
 README.md
-setup.py
+bhc/__init__.py
+bhc/setup.py
 bhc.egg-info/PKG-INFO
 bhc.egg-info/SOURCES.txt
 bhc.egg-info/dependency_links.txt
 bhc.egg-info/top_level.txt
-hierarchytree/__init__.py
-leaf/__init__.py
-split/__init__.py
+bhc/hierarchytree/__init__.py
+bhc/leaf/__init__.py
+bhc/split/__init__.py
