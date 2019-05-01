@@ -4,8 +4,8 @@ from scipy import stats
 from functools import reduce
 from scipy.special import gamma, loggamma
 
-from bhc.helpfncs.distrs.normal_invwish import norm_inv_wish_H1
-from bhc.helpfncs.distrs.beta_bern import beta_bern_H1
+from bhcsvjk.helpfncs.distrs.normal_invwish import norm_inv_wish_H1
+from bhcsvjk.helpfncs.distrs.beta_bern import beta_bern_H1
 
 
 ### hypothesis evaluation helper functions ###

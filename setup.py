@@ -5,11 +5,8 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
 	long_description = fh.read()
 
-with open("LICENSE") as lic:
-	license = lic.read()
-
 setup(
-	name = "bhc",
+	name = "bhcsvjk",
 	version = "0.0.1",
 	author = "Sam Voisin & Jonathan Klus",
 	author_email = "sam.voisin@duke.edu",

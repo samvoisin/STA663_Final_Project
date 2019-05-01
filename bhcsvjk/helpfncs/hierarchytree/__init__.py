@@ -1,6 +1,6 @@
 from functools import reduce
-from bhc.split import Split
-from bhc.helpfncs.hypothesis import posterior_join_k
+from bhcsvjk.split import Split
+from bhcsvjk.helpfncs.hypothesis import posterior_join_k
 
 
 ### HierarchyTree helper functions ###

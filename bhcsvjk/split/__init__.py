@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.special import gamma
-from bhc.helpfncs.hypothesis import marginal_clust_k, posterior_join_k
+from bhcsvjk.helpfncs.hypothesis import marginal_clust_k, posterior_join_k
 
 
 class Split:

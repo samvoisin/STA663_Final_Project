@@ -2,9 +2,9 @@ from pandas import DataFrame
 from numpy import float32
 
 from itertools import combinations
-from bhc.split import Split
-from bhc.leaf import Leaf
-from bhc.helpfncs.hierarchytree import *
+from bhcsvjk.split import Split
+from bhcsvjk.leaf import Leaf
+from bhcsvjk.helpfncs.hierarchytree import *
 
 
 class HierarchyTree:
