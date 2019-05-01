@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 	long_description = fh.read()
 
 setup(
-	name = "bhcsvjk",
+	name = "bhc663_2",
 	version = "0.0.1",
 	author = "Sam Voisin & Jonathan Klus",
 	author_email = "sam.voisin@duke.edu",
