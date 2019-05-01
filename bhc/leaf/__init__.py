@@ -36,4 +36,3 @@ class Leaf:
         self.d = self.alpha
         self.pi = 1.0
         self.postMergProb = 1.0
-        print(self.family)
