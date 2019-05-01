@@ -1,3 +1,7 @@
+Package available at: `https://test.pypi.org/project/bhc663-2/`
+
+Use command: `pip install -i https://test.pypi.org/simple/ bhc663-2`
+
 # Bayesian Hierarchical Clustering
 
 Bayesian Hierarchical Clustering (BHC) is an agglomerative tree-based method for identifying underlying population structures ("clusters"). BHC was introduced by K. Heller and Z. Ghahramani as a way to approximate the more computationally intensive infinite Gaussian mixture model.
