@@ -100,11 +100,35 @@ dimensions (variables) and 3 class labels. Also tested was the wine data set, wh
 of a particular type of wine and 3 class labels corresponding to the region in which they were grown. Both data sets are available for
 download through SciKit-Learn in Python through sklearn.datasets.
 
+The BHC algorithm performance was less than stellar on the Iris data set, with 53% purity and 35% adjusted purity.
+
+Performance on the wine data set was worse, with 42% purity and only 19% adjusted purity. This data set was handled a bit differently, as PCA was used to reduce the dimensionality of the problem from 13 to 3, and a subsample of the original data set was used as there was some numerical instability noticed as the number of training observations approached 200. These first three principal components accounted for approximately 67% of the variance, however the results were still subpar. This result may call into question whether the assumption of a normal likelihood was a good one, particularly given the dismal results for the wine data set. 
+
 ## Comparative Analysis
+
+In addition to the four data sets that were tested on the BHC algorithm, performance on each data set was also compared to built-in SciKit-Learn
+clustering algoriths. Both the Hierarchical Agglomerative Clustering package (the non-Bayesian version of BHC) and the k-Means package were 
+implemented, using a Euclidean distance metric as their decision rule. 
+
+To compare the run time of each algorithm, all were run on the synthetic Gaussian data that was previously described, with 3 runs of 3 loops each.
+The BHC algorithm was predictably the slowest, given its computationally intensive nature. 
+
+In addition to comparing the run time, the performance of all three algorithms was compared using the purity and adjusted purity metrics for all
+four data sets that were tested as a part of this paper. It is worth noting that these algorithms all require the user to indicate the resulting number of clusters. This hyperparameter makes these models less flexible, but also introduces some bias when testing them on a data set for which the
+number of class labels is known. For this reason, we cross-validated the results using a range of class label hyperparameters from 1-9. The results are described below. 
+
+![Performance of two benchmark algorithms versus BHC on purity and adjusted purity](results_table.png)
 
 ### Comparison to Non-Bayesian Hierarchical Clustering
 
+SciKit-Learn's hierarchical clustering algorithm was much faster than BHC, and performed well for small numbers of clusters, or when the correct
+number of class labels was specified as the hyperparameter. But as the hyperparameter was increased, performance, as measured by cluster purity,
+declined steeply. This is somewhat analogous to the process by which BHC arrives at a predicted set of cluster labels, since the expectations 
+are vaguely defined through the prior, but a specific number of clusters is not specified. 
+
 ### Comparison to another algorithm (K-means?)
+
+The k-means algorithm was also compared to BHC
 
 ## Discussion and Conclusions
 
