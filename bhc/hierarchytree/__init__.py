@@ -12,7 +12,12 @@ class HierarchyTree:
     all of the Leaf and Split objects. The tree is complete when all points
     have been agglomerated into a single hierarchical cluster.
 
-    The grow_tree method provides the mechanism for the clustering algorithm.
+    The grow_tree method provides the mechanism for the clustering algorithm
+    The prune_tree method 'snips' merges that have a posterior merge
+    probability below a given threshhold (defualt = 0.5).
+    The generate_clust_dataframe method will create a new attribute within
+    the HierarchyTree instance with the dimensions of the original data
+    and a new column indicating the highest level cluster.
     """
 
     def __init__(self, X, allParams, family = "norm-invwish"):
@@ -22,10 +27,10 @@ class HierarchyTree:
         X - numpy array or pandas DataFrame to be clustered
         priorParams - dictionary of prior parameters (e.g.
         diffuseWishPrior, diffuseNormPrior, clusterConcentrationPrior)
-		family - conjugate family to be used in posterior
-		calculations. Currently supported families are:
-			- norm-invwish : mutlivariate-normal inverse-wishart
-			- beta-bern : beta-bernoulli
+        family - conjugate family to be used in posterior
+        calculations. Currently supported families are:
+            - norm-invwish : mutlivariate-normal inverse-wishart
+            - beta-bern : beta-bernoulli
         class attributes:
         clustCount - number of non-joined trees; incremented -1 each iter
         leaves - initial clusters of single points stored in dictionary
@@ -47,6 +52,7 @@ class HierarchyTree:
             Leaf(i, n, allParams, self.family) for n, i in enumerate(X)
             ]
         self.tierList = [t for t in self.tree.keys()]
+        self.ntiers = len(self.tierList)
 
     def grow_tree(self):
         """
@@ -71,6 +77,7 @@ class HierarchyTree:
 
         # generate list of tier numbers in tree
         self.tierList = [t for t in self.tree.keys()]
+        self.ntiers = len(self.tierList)
 
 
     def prune_tree(self, rk = 0.5):
@@ -113,6 +120,7 @@ class HierarchyTree:
 
         # update list of tier numbers in tree
         self.tierList = [t for t in self.tree.keys()]
+        self.ntiers = len(self.tierList)
 
 
     def tier_summary(self, tiernum = "top"):
@@ -123,22 +131,32 @@ class HierarchyTree:
         print("-------------------------------")
         print(f"Number of clusters: {len(self.tree[tiernum].values())}")
         for n, c in enumerate(self.tree[tiernum].values()):
-            print(f"  Cluster {n} size: {c.clustsize}")
+            print(f"  Cluster {n + 1} size: {c.clustsize}")
             print(f"\t Posterior merge probability: {c.postMergProb:.2}")
         print("\n")
 
 
-    def tree_summary(self):
+    def tree_summary(self, ntiers = 0):
         """
         summarize tree structure from highest tier to lowest
+        ntiers is number of tiers to show - default value
+         will return the entire tree
         """
         tiers = [t for t in self.tree.keys()]
         tiers.reverse() # ordered, descending integers for tiers
+
+        if ntiers == 0:
+            ntiers = self.ntiers
+
+        ctr = 0
         for n in tiers:
             self.tier_summary(n)
+            ctr += 1
+            if ctr == ntiers:
+                break
 
 
-    def generate_clust_frame(self, tier_level = "top"):
+    def generate_clust_frame(self):
         """
         generate pandas DataFrame object with a column of indicators for
         which cluster the vector in that row belongs to
