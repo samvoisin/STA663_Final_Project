@@ -11,17 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Abstract
 
-Bayesian Hierarchical Clustering (BHC) is an agglomerative tree-based method for identifying underlying population structures ("clusters"). BHC was introduced by K. Heller and Z. Ghahramani as a way to approximate the more computationally intensive Dirichlet process mixture model with Gaussian components introduced by C. Rassmusen. The advantage of these models over their counterparts lies in the fact that an *ex ante* number of clusters does not need to be specified. Instead, the Bayesian approach allows for regularized flexibility via a prior placed on the cluster concentration parameter $\alpha$. We utilized the object-oriented programing (OOP) capabilities to build a module that can be used similar manner to the popular scikit-learn library. As with many Bayesian methods, the increased flexibility of BHC comes at a computational cost and the increased risk of poor results due to misspecified priors. Throughout this paper we will describe methods we used to mitigate these issues where possible.
+Bayesian Hierarchical Clustering (BHC) is an agglomerative tree-based method for identifying underlying population structures ("clusters"). BHC was introduced by K. Heller and Z. Ghahramani as a way to approximate the more computationally intensive Dirichlet process mixture model with Gaussian components introduced by C. Rassmusen. The advantage of these models over their counterparts lies in the fact that an *ex ante* number of clusters does not need to be specified. Instead, the Bayesian approach allows for regularized flexibility via a prior placed on the cluster concentration parameter $\alpha$. We utilized the object-oriented programing (OOP) capabilities of Python to build a module that can be used similar manner to algorithms included in the popular scikit-learn library. As with many Bayesian methods, the increased flexibility of BHC comes at a computational cost and the increased risk of poor results due to misspecified priors and likelihoods for a given problem. Throughout this paper we will describe methods we used to mitigate these issues where possible.
 
 ## Background
 
-The paper we chose to analyze and reproduce is *Bayesian Hierarchical Clustering* by Katherine Heller and Zoubin Ghahramani.
+The paper we chose to analyze and reproduce is *Bayesian Hierarchical Clustering* by Katherine Heller and Zoubin Ghahramani (2005).
 
-Cluster analysis is a frequent problem encountered in statistics/ probability and machine learning disciplines. It involves assigning observed data to discrete groups based on shared or similar attributes. Hierarchical clustering is a particular subset of methods of clustering that take into account the *degree* to which data points are similar. Data points that are more similar are clustered first. Then clusters that are less similar are grouped until only one all-encompassing cluster remains. This is also known as *agglomerative clustering*.
+Cluster analysis is a frequent unsupervised learning problem encountered in statistics/ probability and machine learning disciplines. It involves assigning observed data to discrete groups based on shared or similar attributes. Hierarchical clustering is a particular subset of methods of clustering that take into account the *degree* to which data points are similar. Data points that are more similar are clustered first. Then clusters that are less similar are grouped until only one all-encompassing cluster remains. This is also known as *agglomerative clustering*.
 
-The frequentist hierarchical clustering method requires the user to specify the number of clusters prior to the actual clustering process. This is potentially problematic because the true number of clusters that exist within the data distribution is not usually known. This problem is addressed by BHC through the use of a cluster concentration parameter that regularizes, rather than restricts, the number of possible data clusters.
+The frequentist hierarchical clustering method requires the user to specify the number of clusters prior to the actual clustering process. This is potentially problematic because the true number of clusters that exist within the data distribution is not usually known. This problem is addressed by BHC through the use of a cluster concentration parameter that regularizes, rather than restricts, the number of possible data clusters. It also typically uses a distance metric (e.g. Euclidean distance) as a decision rule, while the Bayesian hierarchical clustering method uses marginal
+likelihoods based on a prior and likelihood specified by the user. This provides a more flexible framework.
 
-There are two key limitations to the BHC algorithm according to K. Heller. The first limitation is the computational cost which is $O(n^2)$ using Big-O notation. This is caused by the algorithm's need to compare every possible pair of clusters during each iteration. The second limitation of BHC is the lack of any incorporation of tree uncertainty which is the uncertainty of merging two clusters.
+There are two key limitations to the BHC algorithm according to K. Heller. The first limitation is the computational cost which is $O(n^2)$ using Big-O notation. This is caused by the algorithm's need to compare every possible pair of clusters during each iteration. The second limitation of BHC is the lack of a tree uncertainty metric like a probabilistic interpretation of arriving at one particular tree structure versus another.
 
 ## The Algorithm
 
@@ -63,17 +64,41 @@ We employed the `cProfile` package in order to find the rate limiting steps in t
 
 ## Application to Simulated Data
 
-In order to test our algorithm and its various components we generated three random multivariate Gaussian clusters of different sizes, means, and covariances:
+In Heller, et. al. (2005), she describes one rationale for the Bayesian hierarchical clustering algorithm as being that it is a fast
+approximation to a Dirichlet process model, like a mixture of Gaussians. This model has a known solution as described by Rasmussen (2000),
+but the marginal likelihood is intractable and requires the use of adaptive importance sampling. The problem is therefore quite time
+complex, with Rasmussen describing that it took 18 minutes of CPU time to achieve just 100 independent samples from the posterior distribution.
+To demonstrate the applicability of Heller's algorithm to this problem, we generated synthetic three-dimensional data from three multivariate Gaussian distributions (i.e. there were 3 classes) and specified the weights for each distribution. The resulting data frame was then used to train
+the BHC algorithm, and the predicted class labels were compared to the true class labels. 
 
-Cluster $1$: $\mu_1:$, $\Sigma_1:$, $n:$ 
+Performance of the algorithm was assessed by calculating the purity of the final class labels. The purity metric sums the the maximum 
+number of points in each predicted class that were from the same original class, then divides them by the total number of observations 
+in the data set. This provides a measure of how well the algorithm clustered the data after pruning has been performed (i.e. is each
+predicted class majority from the same true class, is it "pure"), but is rather simplistic in that it can easily be fooled if each
+observation is assigned to its own class. In this case, the purity metric would be 1.0, a perfect score. To compensate for this shortcoming,
+we propose an adjusted purity score which only considers the top $k$ predicted class labels (where $k$ is the true number of classes in the
+data set). This adjusted purity score provided a more realistic assessment of the performance of the clustering algorithm, especially in 
+cases when there are many singletons in the final class assignments.
 
-Cluster $2$: $\mu_2:$, $\Sigma_2:$, $n:$
+The testing described above is fully documented in the reproducible Comparative_Analysis Jupyter Notebook, available on this project's
+GitHub repo. The BHC algorithm performs performs reasonably okay on the synthetic data, achieving $95 \%$ purity and $52 \%$ adjusted purity.
+From a visual inspection of the predicted clusters in 2D, the assignments also appear to reasonable. However, there is certainly room for 
+improvement. The clustering appears to be particularly sensitive to the values assigned to the model hyperparameters, especially that of the
+Dirichlet hyperparameter $\alpha$. 
 
-Cluster $3$: $\mu_3:$, $\Sigma_3:$, $n:$
-
-
+In addition to the Gaussian likelihood, Heller's paper also suggested that clustering could also be computed using Bernoulli-Beta or
+Multinomial-Dirichlet conjugate families. The former is implemented in our version of Heller's BHC algorithm, and the package is structured
+such that the latter conjugate family, or other likelihoods, can be easily added and are compatible with the other helper functions. We also
+tested the BHC algorithm on a synthetic Bernoulli data set that was constructed similarly to the Gaussian described above (except the Bernoulli
+likelihood was used instead of the multivariate Gaussian). The BHC algorithm appeared to have difficulty clustering the data, which has 3 dimensions
+and 3 classes (i.e. there should be 3 clusters), and achieved only 37% purity. 
 
 ## Application to Real Data
+
+The algorithm was also tested on several real data sets, including the canonical Iris data set for clustering data, which consists of 4 
+dimensions (variables) and 3 class labels. Also tested was the wine data set, which consists of 13 variables that describe the attributes
+of a particular type of wine and 3 class labels corresponding to the region in which they were grown. Both data sets are available for
+download through SciKit-Learn in Python through sklearn.datasets.
 
 ## Comparative Analysis
 
