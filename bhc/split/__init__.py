@@ -9,7 +9,7 @@ class Split:
     clusti and clustj are two clusters lower in the hierarchy
     which are joined to form new cluster k
     """
-    
+
     def __init__(self, clusti, clustj):
         """
         initialize Split object
@@ -27,7 +27,7 @@ class Split:
         clustid - tuple of id numbers used to identify subclusters as
         algorithm progresses; see "tree consistent" in BHC paper
         clustsize - number of data points in cluster
-        d - tree depth parameter(?)
+        d - tree depth parameter
         pi - prob of merging clusters i and j
         margLik - prob of data under tree (i.e. p(Dk | Tk))
         postMergProb - posterior probability for cluster k; referred to as rk
@@ -43,25 +43,22 @@ class Split:
         self.tier = max(clusti.tier, clustj.tier) + 1
         self.clustsize = clusti.clustsize + clustj.clustsize
         self.clust = np.vstack([clusti.clust, clustj.clust])
-        
+
         # calculate new d_k
         self.d = (
             self.alpha * gamma(self.clustsize) +
             clusti.d * clustj.d
             )
-        
+
         # calculate new pi_k
         #if np.isnan(self.alpha * gamma(self.clustsize) / self.d) == True:
         #    self.pi = 1.0
         #else:
         self.pi = self.alpha * gamma(self.clustsize) / self.d
-      
+
 
         # calculate marginal likelihood for this cluster (i.e. p(Dk | Tk))
         self.pH1, self.margLik = marginal_clust_k(self.left, self.right)
 
         # calculate posterior merge probability for this cluster (i.e. rk)
         self.postMergProb = posterior_join_k(self.left, self.right)
-
-
-        
