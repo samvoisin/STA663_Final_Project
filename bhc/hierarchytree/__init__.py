@@ -89,7 +89,7 @@ class HierarchyTree:
         rk - posterior merge probability cut threshold; defaults to 0.5
         """
         tiers = [t for t in self.tree.keys()]
-        tiers.reverse() # ordered, descending integers for tiers
+        tiers.reverse() # ordered, descending integers for tiers (in place)
         for t in tiers:
             cutPoints = find_bad_merges(self.tree[t], rk) # see HT helpers
             snip_splits(self.tree[t], cutPoints) # see HT helpers
@@ -185,10 +185,9 @@ class HierarchyTree:
                 if len(idacctfor.intersection(v.idset)) == 0:
                     idacctfor = idacctfor.union(v.idset)
                 else:
-                    # label points 
+                    # label points
                     for i in idacctfor.intersection(v.idset):
                         # assign cluster number for each point in cluster
                         # this goes from bottom to top of tree
                         self.clustDF.loc[i, "clustnum"] = c
                     c += 1 # update to provide a new value for the next cluster
-

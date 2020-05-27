@@ -17,13 +17,16 @@ def get_max_posterior(propck):
     posterior merge probability and return the new cluster
     propck - list of unique proposed combinations of
     clusters i and j
+
+    input: list of Split objects
+    output: cluster combination with maximum posterior probability
     """
     # find pair with maximum posterior probability of merge
     maxPost = reduce(
         lambda ci, cj: ci if ci.postMergProb > cj.postMergProb else cj,
         propck
     )
-    
+
     return maxPost
 
 ###############################################################################
@@ -35,7 +38,7 @@ def place_cluster(ck, tree):
     this change-of-state method will create it
     """
     tree[ck.tier] = {ck.clustid : ck}
-        
+
 ###############################################################################
 
 
@@ -49,7 +52,7 @@ def update_cluster_list(clist, newck):
     clist.remove(newck.left) # remove cluster i
     clist.remove(newck.right) # remove cluster j
     clist.append(newck) # append new cluster k
-    
+
     return clist
 
 
@@ -68,9 +71,9 @@ def find_bad_merges(tier, rk):
     for cid, s in tier.items():
         if s.postMergProb < rk:
             badMerges.append(cid) # append clustid to bad merge list
-    
+
     return badMerges
-    
+
 ###############################################################################
 
 
@@ -84,20 +87,20 @@ def snip_splits(tier, cutpts):
         tier.update({tier[cut].left.clustid : tier[cut].left})
         tier.update({tier[cut].right.clustid : tier[cut].right})
         tier.pop(cut)
-            
+
 ###############################################################################
 
 
 def clear_trimmings(tier, rk):
     """
     remove snipped clusters from a tier. This function should only be run
-    after the entire tree has been pruned. 
+    after the entire tree has been pruned.
     """
     trimmings = []
     for k, splt in tier.items():
         if splt.postMergProb < rk:
             trimmings.append(k)
-    
+
     for t in trimmings:
         tier.pop(t)
 
@@ -113,15 +116,3 @@ def clear_trimmings(tier, rk):
 ###############################################################################
 ######################## cluster plot helper functions ########################
 ###############################################################################
-
-
-
-
-
-
-
-
-
-
-
-
